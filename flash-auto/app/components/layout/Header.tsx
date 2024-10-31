@@ -22,10 +22,10 @@ const Header = () => {
         <AuthHeader />
       ) : (
         <div className="flex gap-2">
-          <Link href="/signup" className="px-4 py-2 rounded-md bg-red-400 text-white hover:bg-white hover:border hover:border-red-400 hover:text-red-400">
+          <Link href="/signup" className="px-4 py-2 rounded-full bg-red-400 text-white hover:bg-white hover:border hover:border-red-400 hover:text-red-400">
             Signup
           </Link>
-          <Link href="/signin" className="px-4 py-2 rounded-md bg-white border border-red-400 text-red-400 hover:bg-red-400 hover:text-white">
+          <Link href="/signin" className="px-4 py-2 rounded-full bg-white border border-red-400 text-red-400 hover:bg-red-400 hover:text-white">
             Signin
           </Link>
         </div>

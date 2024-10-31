@@ -2,7 +2,7 @@ import Link from "next/link"
 
 const Footer = () => {
   return (
-    <div className='bg-gradient-to-b bg-gray-800 text-white  flex h-40 justify-center items-center gap-12'>
+    <div className='bg-gradient-to-b bg-gray-800 text-white  flex py-32 justify-center items-center gap-12'>
         <div className='logo'></div>
 
         <p className="w-96">&copy; AutoFlash. All rights reserved.</p>
