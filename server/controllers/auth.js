@@ -1,94 +1,96 @@
-const User = require('../models/user')
+const User = require('../models/user.js');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const secret = process.env.JWT_SECRET;
 
 
-const signup =  async(req, res) => {
+
+
+const signup = async (req, res) => {
     try {
+        console.log('body', req.body)
+        const { fullName, password, email, phoneNumber } = req.body;
 
-        if(!req.body.username || !req.body.password || !req.body.email){
-            return res.status(400).json({message: 'Invalid format'})
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const duplicate = await User.findOne({ email });
+
+        if (duplicate) {
+            return res.status(409).json({ message: 'Duplicate account found.' });
         }
-        const {username, password, email} = req.body
-        const hashedPassword = await bcrypt.hash(password, 8)
-        console.log("hashed password", hashedPassword)
 
-        const duplicate = await User.findOne({
-            username
-        })
-
-        if(duplicate){
-            return res.status(400).json({message: "Username is taken."})
-        }
-        const newUser = await User.create({
-            username,
+        const user = await User.create({
+            fullName,
+            phoneNumber,
+            email,
             password: hashedPassword,
-            email
-        })
+        });
 
-        console.log("new user ", newUser)
+        const payload = { id: user._id, role: user.role };
+        const token = jwt.sign(payload, secret, { expiresIn: '1h' });
 
-        const token = jwt.sign({username}, process.env.jwt_secret, {
+        res.status(201).json({ accessToken: token, id: user._id, role: user.role });
 
-            expiresIn: '2h'
-        })
-
-        console.log("new user ", newUser, token)
-
-        
-        res.status(201).json({message: "User created successfully", data: newUser.toObject() , accessToken: token})
-
-        
     } catch (error) {
-        res.status(500).json({message: "Internal server error."})
-        
+        res.status(500).json({ message: 'Server Error.' });
     }
+};
 
-}
 
-
-const signin =  async(req, res) => {
-    console.log("signin request body ", req.body)
+const signin = async (req, res) => {
     try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
 
-        if(!req.body.username || !req.body.password ){
-            return res.status(400).json({message: 'Invalid format'})
-        }
-        const {username, password} = req.body
-        const user = await User.findOne({
-            username: username
-        })
-
-        console.log("user", user)
-
-        if(!user){
-            return res.status(404).json({message: "The user is not found."})
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
         }
 
-        await bcrypt.compare(password, user.password, (err, result) => {
-            if(result){
-                const token = jwt.sign({username}, process.env.jwt_secret, {
-                    expiresIn: '2h'
-                })
-                console.log('sign in success',{message: "Successfully signed in.", accessToken: token, data: user.toObject()  } )
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Incorrect password' });
+        }
 
-                 return res.status(200).json({message: "Successfully signed in.", accessToken: token, data: user.toObject()  })
-            } 
-            if (err){
-                return res.status(400).json({message: "Wrong password"})
-            }
-        })
+        const payload = { id: user._id, role: user.role };
+        const token = jwt.sign(payload, secret, { expiresIn: '2h' });
 
-        
-        
+        res.status(200).json({ accessToken: token, id: user._id, role: user.role });
     } catch (error) {
-        res.status(500).json({message: "Internal server error."})
-        
+        res.status(500).json({ message: error.message });
     }
+};
 
-}
+
+const googleAuthSuccess = async (req, res) => {
+    const token = jwt.sign({ id: req.user.id, role: req.user.role }, secret, { expiresIn: '2h' });
+    const redirectUrl = `${process.env.CLIENT_URL}/google-auth?id=${req.user.id}&role=${req.user.role}&token=${token}`;
+    res.redirect(redirectUrl);  
+};
+
+
+const logout = async (req, res) => {
+    res.status(200).json({ success: true, message: 'User logged out successfully' });
+};
+
+
+const updateUserProfile = async (req, res) => {
+    try {
+        const { id } = req.user;
+        const update = req.body;
+
+        const updatedUser = await User.findByIdAndUpdate(id, update, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        res.status(500).json({ message: 'Internal Server Error.' });
+    }
+};
 
 module.exports = {
+    signup,
     signin,
-    signup
-}
+    googleAuthSuccess,
+};
