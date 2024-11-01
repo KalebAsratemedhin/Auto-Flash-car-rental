@@ -12,7 +12,7 @@ function Landing() {
 
         <p className="text-lg my-3">Rent a car, whenever and wherever you need it.</p>
         <div className="flex gap-3 mt-5">
-          <Link href="/signup" className="px-5 py-2 bg-red-400 text-white rounded-md">Get Started</Link>
+          <Link href="/auth/signup" className="px-5 py-2 bg-red-400 text-white rounded-md">Get Started</Link>
         </div>
       </header>
 
