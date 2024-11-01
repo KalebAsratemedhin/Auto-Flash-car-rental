@@ -1,15 +1,15 @@
 'use client'
+import { useSession } from 'next-auth/react';
 import AuthHeader from './AuthHeader';
 import Link from 'next/link';
 
 const Header = () => {
-  // const token = localStorage.getItem('accessToken');
-  const token = null;
+  const session = useSession()
 
   return (
     <div className="flex items-center justify-between h-20 bg-white shadow-md px-4">
       <div className="text-2xl text-red-400">
-        <img src="../../favicon.ico" className='w-20 h-20' alt="" />
+        <img src="/logo-1.ico" className='w-20 h-20' alt="" />
       </div>
 
       <nav className='flex justify-between gap-12'>
@@ -19,7 +19,7 @@ const Header = () => {
      
       </nav>
 
-      {token ? (
+      { session.status === 'authenticated' ? (
         <AuthHeader />
       ) : (
         <div className="flex gap-2">

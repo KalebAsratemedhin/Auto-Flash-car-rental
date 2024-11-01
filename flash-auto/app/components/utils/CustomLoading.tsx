@@ -1,7 +1,7 @@
 
 const CustomLoading = () => {
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
+    <div className="flex items-center justify-center h-40 w-40 bg-gray-100">
       <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
       <style jsx>{`
         .loader {

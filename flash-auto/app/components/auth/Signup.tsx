@@ -2,16 +2,13 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-// import { useSignupMutation } from "../../redux/api/authAPI";
-// import Spinner from "../utils/Spinner";
-// import { useDispatch } from "react-redux";
-// import { setAuth } from "../../redux/slices/authSlice";
-// import { SignupCredential } from "../../types/User";
 import { FcGoogle } from "react-icons/fc";
 import TextField from "../utils/TextField";
-// import TextField from "../utils/TextField"; 
-// import FormError from "../utils/FormError";
-
+import CustomError from "../utils/CustomError";
+import { useSignupMutation } from "@/redux/api/authAPI";
+import { useRouter } from "next/navigation";
+import CustomLoading from "../utils/CustomLoading";
+import { SignupCredential } from "@/types/User";
 
 
 interface FormData {
@@ -19,10 +16,6 @@ interface FormData {
   fullName: string;
   email: string;
   phoneNumber: string;
-  speciality?: string;
-  orgID?: string;
-  experience?: string;
-  educationLevel?: string;
 }
 
 const Signup = () => {
@@ -30,33 +23,30 @@ const Signup = () => {
     mode: 'onChange'
   });
 
-//   const [signupUser, { isError, isLoading, isSuccess, error, data: signupData }] = useSignupMutation();
-//   const navigate = useNavigate();
-//   const dispatch = useDispatch();
+  const [signupUser, { isError, isLoading, isSuccess, error, data: signupData }] = useSignupMutation();
+  const router = useRouter();
 
   const onSubmit = async (data: FormData) => {
-    // if (isValid) {
-    //   const result = await signupUser(data as SignupCredential);
-    //   console.log('result signup', result);
-    // }
+    if (isValid) {
+      const result = await signupUser(data as SignupCredential);
+      console.log('result signup', result);
+    }
   };
 
-//   useEffect(() => {
-//     if (isSuccess) {
-//       console.log('signup data', signupData)
-//       dispatch(setAuth(signupData));
-//       navigate('/dashboard');
-//     }
-//   }, [isSuccess]);
+  useEffect(() => {
+    if (isSuccess) {
+      router.push('/auth/signin');
+    }
+  }, [isSuccess]);
 
-//   if (isLoading) return <Spinner />;
+  if (isLoading) return <CustomLoading />;
 
   return (
-    <div className="border shadow-lg bg-white h-full p-4 flex flex-col justify-center items-center rounded-md">
+    <div className="border shadow-lg bg-white h-full  p-4 flex flex-col justify-center items-center rounded-md">
       <h1 className="text-3xl text-blue-950 font-semibold mb-2">Welcome to AutoFlash!</h1>
       <p className="text-3xl text-red-400 font-semibold mt-5">Signup</p>
 
-      <form noValidate onSubmit={handleSubmit(onSubmit)} className="p-10">
+      <form noValidate onSubmit={handleSubmit(onSubmit)} className="p-10 ">
         <div className="py-5 w-full">
           <Link href={`/auth/google`} className="border p-4 sm:px-20 w-full flex justify-center items-center gap-2 rounded-md text-gray-600 hover:shadow-sm">
             <FcGoogle className="w-8 h-8" /> Sign up with Google
@@ -67,7 +57,9 @@ const Signup = () => {
           <p>or</p>
           <p className="bg-gray-400 h-[1px] w-1/3"></p>
         </div>
-        {/* {isError && <FormError error={error} />} */}
+        {isError && <CustomError error={error} />}
+
+        {/* <p>{process.env.BACKEND_URL}</p> */}
 
 
         <TextField
@@ -118,11 +110,11 @@ const Signup = () => {
           error={errors.phoneNumber?.message}
         />
 
-        <button type="submit" className="w-full bg-purple-700 text-lg font-semibold hover:shadow-md text-white py-2 rounded-full">Signup</button>
+        <button type="submit" className="w-full bg-red-500 text-lg font-semibold hover:shadow-md text-white py-2 rounded-full">Signup</button>
       </form>
 
-      <p className="text-gray-400 mt-8">Have an account? <Link className="text-red-400 hover:text-purple-800" href='/auth/signin'>Signin</Link></p>
-      <p className="text-gray-400">By clicking 'Signup' you accept our terms or <span className="text-purple-400">privacy</span> and <span className="text-purple-400">security</span></p>
+      <p className="text-gray-400 mt-8 text-start">Have an account? <Link className="text-red-400 hover:text-purple-800" href='/auth/signin'>Signin</Link></p>
+      <p className="text-gray-400 text-start">By clicking 'Signup' you accept our terms or <span className="text-purple-400">privacy</span> and <span className="text-purple-400">security</span></p>
     </div>
   );
 };

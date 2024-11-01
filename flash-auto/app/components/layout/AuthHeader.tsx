@@ -4,9 +4,7 @@ import Link from "next/link";
 
 
 const AuthHeader = () => {
-//   const {data, loading, error} = useFetch('http://localhost:5000/users/current-user')
-
-    const user: string = '';
+  
 //   if(loading)
 //     return <Loading />
 

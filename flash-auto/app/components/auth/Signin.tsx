@@ -1,56 +1,51 @@
 'use client'
 import { useForm } from "react-hook-form"
-// import { Link, useNavigate } from "react-router-dom";
-// import { useSigninMutation } from "../../redux/api/authAPI";
-// import { authSelector, setAuth } from "../../redux/slices/authSlice";
-// import { useDispatch, useSelector } from "react-redux";
-
 import Link from "next/link";
 
 import { FcGoogle } from "react-icons/fc";
+import { signIn, useSession } from "next-auth/react";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import CustomLoading from "../utils/CustomLoading";
+import CustomError from "../utils/CustomError";
 interface FormData{
     email: string;
     password: string;
-    role: string;
 }
 
 const Signin = () => {
     const {formState: {errors}, register, handleSubmit} = useForm<FormData>({
-        defaultValues: {
-            role: 'patient',
-        },
         mode: 'onChange'
     });
-    // const [signinUser, {isError, isLoading, isSuccess, error, data}] = useSigninMutation()
-    // const navigate = useNavigate()
-    // const dispatch = useDispatch()
-    // const authState = useSelector(authSelector)
+
+    const router = useRouter()
+
     const onSubmit = async(data: FormData) => {
-
-        // const result = await signinUser(data)
-        // console.log('singin result', result)
-
+        const result = await signIn("credentials", {
+            redirect: false,
+            email: data.email,
+            password: data.password,
+        });
+    
+        if (!result?.error) {
+            // Successful sign-in, handle navigation here if needed
+        } else {
+            console.error('err',result.error);
+        }
     }
 
-    // useEffect(() => {
-    //     if(isSuccess){
-    //         console.log('just success', authState, data)
-            
+    const session = useSession()
 
+    useEffect(() => {
+        if(session.status === "authenticated"){
+            router.push('/dashboard')
+        }
 
-    //         dispatch(setAuth(data))
-
-    //     }
-    //     if(authState.id){
-    //         console.log(authState.id, 'email', authState.role)
-    //         navigate('/dashboard')
-    //     }
-
-    // }, [isSuccess, authState])
+    }, [session.status, router])
 
     
   return (
-    <div className="w-1/3 border border-gray-200 rounded-md py-8 px-4 bg-white ">
+    <div className=" border border-gray-200 rounded-md py-8 px-4 bg-white ">
         <h1 className="text-3xl text-center text-blue-950 font-semibold ">Welcome back to AutoFlash!</h1>
         
         <form noValidate onSubmit={handleSubmit(onSubmit)} className="  px-10 py-5">
@@ -63,8 +58,7 @@ const Signin = () => {
                 <p className="bg-gray-400 h-[1px] w-1/3"></p>
             </div>  
 
-            {/* {isLoading && <Spinner />}
-            {isError && <FormError error={error} />} */}
+            {session.status === 'loading' && <CustomLoading />}
 
             <div className="my-3">
                 <label className="text-gray-500 text-base" htmlFor="email">Email</label>
@@ -83,7 +77,7 @@ const Signin = () => {
                
                 <p className="text-red-500 text-base mt-1">{errors.password?.message}</p>
             </div>
-            <button type="submit" className="w-full  bg-purple-700 text-lg font-semibold hover:shadow-md text-white py-2 rounded-full">Signin</button> 
+            <button type="submit" className="w-full  bg-red-500 text-lg font-semibold hover:shadow-md text-white py-2 rounded-full">Signin</button> 
               
              <p className="text-gray-400 mt-8 text-start">Don't have an account? <Link className="text-red-400 hover:text-purple-800" href='/auth/signup'>Signup</Link> </p>
              <p className="text-gray-400 text-start">By clicking 'Signin' you accept our terms or <span className="text-purple-400">privacy</span> and <span className="text-purple-400">security</span></p>
