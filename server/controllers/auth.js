@@ -60,10 +60,31 @@ const signin = async (req, res) => {
 };
 
 
-const googleAuthSuccess = async (req, res) => {
-    const token = jwt.sign({ id: req.user.id, role: req.user.role }, secret, { expiresIn: '2h' });
-    const redirectUrl = `${process.env.CLIENT_URL}/google-auth?id=${req.user.id}&role=${req.user.role}&token=${token}`;
-    res.redirect(redirectUrl);  
+const googleAuth= async (req, res) => {
+    const {id, name, email, image} = req.body
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+        user = await User.create({
+            fullName: name,
+            email: email,
+            googleId: id,
+            profilePic: image,
+        });
+    }
+
+    if (user && !user.googleId){
+        return res.status(403).json({message: "Another signin option exists."})
+    }
+
+
+
+    const payload = { id: user._id, role: user.role };
+    const token = jwt.sign(payload, secret, { expiresIn: '2h' });
+
+    res.status(200).json({ accessToken: token, id: user._id, role: user.role });
+
 };
 
 
@@ -90,7 +111,7 @@ const updateUserProfile = async (req, res) => {
 };
 
 module.exports = {
-    signup,
+    signup, 
     signin,
-    googleAuthSuccess,
+    googleAuth,
 };
