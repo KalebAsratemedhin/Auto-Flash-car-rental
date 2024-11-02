@@ -4,10 +4,10 @@ import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    // GoogleProvider({
-    //   clientId: process.env.GOOGLE_CLIENT_ID!,
-    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    // }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
     CredentialsProvider({
       name: "credentials",
       credentials: {
@@ -18,7 +18,6 @@ export const authOptions: NextAuthOptions = {
       
 
         try {
-          console.log('authorize', credentials)
           const result = await fetch(`${process.env.BACKEND_URL}/auth/signin`,
             {
                 method: "POST",
@@ -48,6 +47,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user, account }) {
       if (account?.provider === "google") {
+        console.log('google user', user)
         try {
           await fetch(`${process.env.BACKEND_URL}/auth/google`, {
             method: "POST",
@@ -57,7 +57,7 @@ export const authOptions: NextAuthOptions = {
             body: JSON.stringify(user),
           });
           return true;
-        } catch (error) {
+        } catch (error) { 
           console.error("Error during Google sign-in:", error);
           return false;
         }
@@ -65,6 +65,7 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
     async session({ session, token }) {
+      
       session.user = token.user as User;
       return session;
     },
@@ -78,6 +79,12 @@ export const authOptions: NextAuthOptions = {
     },
   },
   secret: process.env.NEXTAUTH_SECRET!,
+  session: {
+    maxAge: 2 * 60
+  },
+  jwt: {
+    maxAge: 2 * 60
+  }
 };
 
 const handler = NextAuth(authOptions);

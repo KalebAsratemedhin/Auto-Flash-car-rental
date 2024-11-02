@@ -9,6 +9,7 @@ import { useSignupMutation } from "@/redux/api/authAPI";
 import { useRouter } from "next/navigation";
 import CustomLoading from "../utils/CustomLoading";
 import { SignupCredential } from "@/types/User";
+import { signIn } from "next-auth/react";
 
 
 interface FormData {
@@ -46,11 +47,9 @@ const Signup = () => {
       <h1 className="text-3xl text-blue-950 font-semibold mb-2">Welcome to AutoFlash!</h1>
       <p className="text-3xl text-red-400 font-semibold mt-5">Signup</p>
 
-      <form noValidate onSubmit={handleSubmit(onSubmit)} className="p-10 ">
+      <div className="p-10 ">
         <div className="py-5 w-full">
-          <Link href={`/auth/google`} className="border p-4 sm:px-20 w-full flex justify-center items-center gap-2 rounded-md text-gray-600 hover:shadow-sm">
-            <FcGoogle className="w-8 h-8" /> Sign up with Google
-          </Link>
+          <button onClick={() => signIn('google')} className="border p-2 w-full flex justify-center items-center gap-2 rounded-md text-gray-600 hover:shadow-sm"> <FcGoogle className="w-8 h-8" /> Sign in with Google</button>        
         </div>
         <div className="flex justify-between items-center w-full">
           <p className="bg-gray-400 h-[1px] w-1/3"></p>
@@ -59,59 +58,60 @@ const Signup = () => {
         </div>
         {isError && <CustomError error={error} />}
 
-        {/* <p>{process.env.BACKEND_URL}</p> */}
 
+        <form noValidate onSubmit={handleSubmit(onSubmit)}>
 
-        <TextField
-          label="Fullname"
-          id="fullName"
-          type="text"
-          register={register}
-          validation={{ required: "Fullname is required" }}
-          error={errors.fullName?.message}
-        />
+          <TextField
+            label="Fullname"
+            id="fullName"
+            type="text"
+            register={register}
+            validation={{ required: "Fullname is required" }}
+            error={errors.fullName?.message}
+          />
 
-        <TextField
-          label="Password"
-          id="password"
-          type="password"
-          register={register}
-          validation={{
-            required: "Password is required",
-            validate: (value: string) => {
-              if (value.length < 6) return "Password should not be shorter than six characters.";
-              return /[a-zA-Z]{1,}/.test(value) || 'Password must contain at least one letter';
-            }
-          }}
-          error={errors.password?.message}
-        />
+          <TextField
+            label="Password"
+            id="password"
+            type="password"
+            register={register}
+            validation={{
+              required: "Password is required",
+              validate: (value: string) => {
+                if (value.length < 6) return "Password should not be shorter than six characters.";
+                return /[a-zA-Z]{1,}/.test(value) || 'Password must contain at least one letter';
+              }
+            }}
+            error={errors.password?.message}
+          />
 
-        <TextField
-          label="Email"
-          id="email"
-          type="email"
-          register={register}
-          validation={{
-            required: "Email is required",
-            pattern: {
-              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-              message: "Email should include letters and digits"
-            }
-          }}
-          error={errors.email?.message}
-        />
+          <TextField
+            label="Email"
+            id="email"
+            type="email"
+            register={register}
+            validation={{
+              required: "Email is required",
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                message: "Email should include letters and digits"
+              }
+            }}
+            error={errors.email?.message}
+          />
 
-        <TextField
-          label="Phone Number"
-          id="phoneNumber"
-          type="text"
-          register={register}
-          validation={{ required: "Phone Number is required" }}
-          error={errors.phoneNumber?.message}
-        />
+          <TextField
+            label="Phone Number"
+            id="phoneNumber"
+            type="text"
+            register={register}
+            validation={{ required: "Phone Number is required" }}
+            error={errors.phoneNumber?.message}
+          />
 
-        <button type="submit" className="w-full bg-red-500 text-lg font-semibold hover:shadow-md text-white py-2 rounded-full">Signup</button>
-      </form>
+          <button type="submit" className="w-full bg-red-500 text-lg font-semibold hover:shadow-md text-white py-2 rounded-full">Signup</button>
+        </form>
+        </div>
 
       <p className="text-gray-400 mt-8 text-start">Have an account? <Link className="text-red-400 hover:text-purple-800" href='/auth/signin'>Signin</Link></p>
       <p className="text-gray-400 text-start">By clicking 'Signup' you accept our terms or <span className="text-purple-400">privacy</span> and <span className="text-purple-400">security</span></p>

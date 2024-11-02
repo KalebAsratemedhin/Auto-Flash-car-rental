@@ -17,7 +17,7 @@ const AuthHeader = () => {
 
   return (
     <div >        
-        {
+        {/* {
           user &&
           <div className='logged-in'>
             <button onClick={() => localStorage.removeItem('accessToken')} className='signout'>signout</button>
@@ -25,7 +25,8 @@ const AuthHeader = () => {
           </div>
           
 
-        }
+        } */}
+        user
     </div>
   )}
 
