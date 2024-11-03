@@ -83,7 +83,7 @@ const googleAuth= async (req, res) => {
     const payload = { id: user._id, role: user.role };
     const token = jwt.sign(payload, secret, { expiresIn: '2h' });
 
-    res.status(200).json({ accessToken: token, id: user._id, role: user.role });
+    res.status(200).json({ accessToken: token, id: user._id, role: user.role, name: user.fullName, email: user.email, image: user.profilePic});
 
 };
 

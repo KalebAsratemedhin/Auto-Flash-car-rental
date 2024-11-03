@@ -25,14 +25,12 @@ const getCurrentUser =  async(req, res) => {
     try {
         console.log('req.', req.user)
 
-        const {username} = req.user
+        const {id} = req.user
 
-        const user = await User.findOne({
-            username
-        })
+        const user = await User.findById(id)
 
 
-        res.status(201).json({message: "User found.", data: user.toObject() })
+        res.status(201).json({message: "User found.", user: user.toObject() })
 
         
     } catch (error) {
