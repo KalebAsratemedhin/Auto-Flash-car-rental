@@ -20,3 +20,45 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 } */
 
+/* Add these styles to your global CSS or the component CSS */
+.service-item {
+  opacity: 0;
+  transform: translateX(-100px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.service-item.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 
+@keyframes swoopIn {
+  0% {
+    transform: translateX(50%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-swoopIn {
+  animation: swoopIn 2s ease-out forwards;
+} */
+
+@keyframes swoopIn {
+  0% {
+    transform: translateX(70%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-swoopIn {
+  animation: swoopIn 1s ease-out forwards;
+}
