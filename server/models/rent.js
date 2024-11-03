@@ -5,8 +5,8 @@ const rentSchema = new mongoose.Schema({
   contact: { type: String, required: true },
   duration: { type: Number, required: true },
   car: { type: mongoose.Schema.Types.ObjectId, ref: 'Car', required: true },
-  renter: { type: String, ref: 'User', required: true }, 
-  rentee: { type: String, ref: 'User', required: true},
+  renter: { type: mongoose.SchemaTypes.ObjectId, ref: 'User', required: true }, 
+  rentee: { type: mongoose.SchemaTypes.ObjectId, ref: 'User', required: true},
   status: { 
     type: String, 
     enum: ['pending', 'active', 'returned'], 
