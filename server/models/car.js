@@ -7,7 +7,7 @@ const carSchema = new mongoose.Schema({
     ref: "User",
     required: true
   },
-  brand: { type: String, required: true },
+  make: { type: String, required: true },
   model: { type: String, required: true },
   age: { type: Number, required: true },
   count: { type: Number, required: true },
