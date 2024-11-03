@@ -4,8 +4,6 @@ import { useGetCurrentUserQuery } from "@/redux/api/userAPI";
 import Link from "next/link";
 import CustomLoading from "../utils/CustomLoading";
 import CustomError from "../utils/CustomError";
-import { useSelector } from "react-redux";
-import { authSelector } from "@/redux/slices/authSlice";
 import { signOut } from "next-auth/react";
 
 

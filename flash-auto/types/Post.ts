@@ -1,6 +1,7 @@
 import { User } from "./User";
 
 export interface Post {
+    _id: string;
     make: string;
     model: string;
     age: number;

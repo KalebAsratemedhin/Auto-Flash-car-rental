@@ -2,10 +2,10 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { User, UserSummary } from "../../types/User";
 import { RootState } from "../store";
 
-export const userAPI = createApi({
-    reducerPath: 'userApi',
+export const rentAPI = createApi({
+    reducerPath: 'rentApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: `http://localhost:5000/users`,
+        baseUrl: `http://localhost:5000/rents`,
         prepareHeaders: (headers, { getState }) => {
             const state = getState() as RootState;
             const accessToken = state.auth?.accessToken;
@@ -17,30 +17,13 @@ export const userAPI = createApi({
         }
     }),
     endpoints: (builder) => ({
-        getCurrentUser: builder.query<User, void>({
-            query: () => ({
-                url: '/current-user',
-                method: 'GET'
-            })
-        }),
-        getUserById: builder.query<User, string>({
+        getUserRents: builder.query<UserSummary, string>({
             query: (userId) => ({
                 url: `/${userId}`,
-                method: 'GET'
-            })
-        }),
-        getUserSummary: builder.query<{data: UserSummary}, string>({
-            query: (userId) => ({
-                url: `/summary/${userId}`,
                 method: 'GET'
             })
         })
     })
 });
 
-export const { 
-    useGetCurrentUserQuery,
-    useGetUserSummaryQuery,
-    useGetUserByIdQuery
-
- } = userAPI;
+export const { useGetUserRentsQuery } = rentAPI;

@@ -19,17 +19,12 @@ export interface User extends Response{
    
 }
 
-export interface DoctorData {
-    userId: string;
-    speciality: string;
-    experience: string;
-    educationLevel: string;
-    rating?: number;
+export interface UserSummary {
+    rented: number;
+    posts: number;
+    income: number;
 }
 
-export interface Doctor extends User {
-    doctorData: DoctorData;
-}
 
 export interface DoctorDataUpdate {
     speciality?: string;
@@ -47,17 +42,6 @@ export interface UserUpdate{
     profilePic?: string;
 }
 
-export interface SigninCredential{
-    email: string;
-    password: string;
-}
-
-export interface SignupCredential{
-    fullName: string;
-    email: string;
-    password: string;
-    phoneNumber: string;
-}
 
 
 export interface AuthResponse{

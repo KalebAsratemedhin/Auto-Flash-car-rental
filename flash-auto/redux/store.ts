@@ -3,21 +3,24 @@ import { authAPI } from "./api/authAPI";
 import { userAPI } from "./api/userAPI";
 import authReducer from '@/redux/slices/authSlice'
 import { postAPI } from "./api/postAPI";
+import { rentAPI } from "./api/rentAPI";
 
 export const store = configureStore({
     reducer: {
         [authAPI.reducerPath]: authAPI.reducer,
         [userAPI.reducerPath]: userAPI.reducer,
         [postAPI.reducerPath]: postAPI.reducer,
+        [rentAPI.reducerPath]: rentAPI.reducer,
         auth: authReducer
         
-
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware()
           .concat(authAPI.middleware)
           .concat(userAPI.middleware)
           .concat(postAPI.middleware)
+          .concat(rentAPI.middleware)
+
 
 
 
