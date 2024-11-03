@@ -1,5 +1,10 @@
+'use client'
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useDispatch, useSelector } from "react-redux";
+import { authSelector, setSession } from "@/redux/slices/authSlice";
 
 
 const layout = ({
@@ -7,18 +12,38 @@ const layout = ({
   }: Readonly<{
     children: React.ReactNode;
   }>) => {
-  return (
-    <div>
-            
-        <Header />
 
-        <div>
-            {children}
+  const session = useSession()
+  const dispatch = useDispatch()
+  const token = useSelector(authSelector)
 
-        </div>
-        <Footer />
-    </div>
-  )
+  useEffect(() => {
+
+
+    if(session.status === "authenticated"){
+      console.log(session.data.user,'token')
+      dispatch(setSession(session.data.user.accessToken))
+    }
+
+  }, [session.status, dispatch, setSession, session.data])
+
+
+  if (token.accessToken || session.status === "unauthenticated"){
+    return (
+      <div className="">
+              
+          <Header />
+  
+          <div className="">
+              {children}
+  
+          </div>
+          <Footer />
+      </div>
+    )
+  }
+
+
 }
 
 export default layout

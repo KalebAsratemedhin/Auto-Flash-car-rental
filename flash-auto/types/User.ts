@@ -1,15 +1,21 @@
 
-export interface User{
-    _id: string;
-    fullName: string;
-    email: string;
-    password?: string;
-    phoneNumber?: string;
-    age?: number;
-    address?: string;
-    sex?: string;
-    role: string;
-    profilePic: string;
+export interface Response{
+    message: string;
+}
+
+export interface User extends Response{
+    user: {
+        _id: string;
+        fullName: string;
+        email: string;
+        password?: string;
+        phoneNumber?: string;
+        age?: number;
+        address?: string;
+        sex?: string;
+        role: string;
+        profilePic: string;
+    }
    
 }
 
@@ -66,3 +72,5 @@ export interface AdminStats{
     patientsCount: number;
     appointmentsCount: number;
 }
+
+

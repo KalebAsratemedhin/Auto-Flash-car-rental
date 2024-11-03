@@ -36,7 +36,7 @@ const Signin = () => {
 
     useEffect(() => {
         if(session.status === "authenticated"){
-            router.push('/dashboard')
+            router.push(`/dashboard/${session.data.user.id}`)
         }
 
     }, [session.status, router])

@@ -49,14 +49,27 @@ export const authOptions: NextAuthOptions = {
       if (account?.provider === "google") {
         console.log('google user', user)
         try {
-          await fetch(`${process.env.BACKEND_URL}/auth/google`, {
+          const res = await fetch(`${process.env.BACKEND_URL}/auth/google`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify(user),
           });
-          return true;
+
+          const data = await res.json();
+
+          // Check if the backend response contains user data
+          if (data) {
+            console.log('data', data)
+
+            user.id = data.id,
+            user.accessToken = data.accessToken,
+            user.role = data.role
+            return true;
+          } else {
+            return false; 
+          }
         } catch (error) { 
           console.error("Error during Google sign-in:", error);
           return false;
@@ -65,11 +78,14 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
     async session({ session, token }) {
+      console.log('token', token)
+
       
       session.user = token.user as User;
       return session;
     },
     async jwt({ token, user }) {
+      console.log('jwt user', user)
 
       if (user) {
         token.user = user;
