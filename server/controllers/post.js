@@ -2,21 +2,23 @@ const Car = require('../models/car');
 
 const postCar = async (req, res) => {
   try {
-    const { brand, model, description, age, price, count} = req.body;
-    const photoPath = req.file ? req.file.path : null;
-    const {username} = req.user
+    console.log('post req', req.body)
+    console.log('file', req.file.path)
+    const { make, model, description, age, price, count} = req.body;
+    const photoPath = req.file.path
+    const {id} = req.user
  
     if (!photoPath) {
       return res.status(400).json({ message: 'Photo is required' });
     }
 
     const newCar = await Car.create({
-      username,
-      brand,
+      owner: id,
+      make,
       model,
-      age,
-      count,
-      price,
+      age: parseInt(age),
+      count: parseInt(count),
+      price: parseInt(price),
       description,
       photo: photoPath
     });
