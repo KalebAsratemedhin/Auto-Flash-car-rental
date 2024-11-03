@@ -17,7 +17,7 @@ const layout = ({
   } else{
     return (
         <div className="flex">
-            <div className="w-64 sticky top-0 h-full overflow-y-auto">
+            <div className="w-64 sticky top-0 h-full overflow-y-auto shadow-md">
                 <Sidebar />
             </div>
             <div className="flex-grow overflow-y-auto">

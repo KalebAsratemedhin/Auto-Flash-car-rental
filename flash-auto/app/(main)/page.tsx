@@ -100,7 +100,7 @@ function Landing() {
 
         <div className="space-y-8">
           {services.map((service, index) => (
-            <div className={`ml-${(index + 1) * 8} `}>
+            <div className={`ml-${(index) * 8} `}>
               <div key={service.id} className={`flex items-center space-x-6 ml-24 transition duration-300 ease-in-out`}>
                 <div className="relative flex justify-center items-center w-20 h-20">
                   <div className="absolute w-20 h-20 border-4 border-red-600 rounded-full transform rotate-[15deg] border-t-transparent "></div>

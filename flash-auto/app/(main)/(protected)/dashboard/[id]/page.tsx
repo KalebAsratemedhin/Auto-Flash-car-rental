@@ -3,6 +3,8 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { User } from '@/types/User';
+import RentalsTable from '@/app/components/rent/RentalsTable';
+import Car from '@/app/components/post/Car';
 
 
 const Dashboard = ({params}: {params: {id: string}}) => {
@@ -59,16 +61,13 @@ const Dashboard = ({params}: {params: {id: string}}) => {
             </div>
           </div>
 
-          {/* User Profile Section */}
-          <UserProfile user={user} />
+          <RentalsTable />
 
-          {/* Cars Available Section */}
-          <h2 className="text-2xl font-semibold mt-8 mb-4">Available Cars</h2>
-          <CarList />
+          <div className='m-2'>
+          <Car />
+          </div>
 
-          {/* Recent Bookings Section */}
-          <h2 className="text-2xl font-semibold mt-8 mb-4">Recent Bookings</h2>
-          <BookingList userId={id} />
+         
         </div>
     </div>
   );
