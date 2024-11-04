@@ -1,6 +1,5 @@
 'use client'
 import RentalsTable from '@/app/components/rent/RentalsTable';
-import CarList from '@/app/components/post/CarList';
 import CustomLoading from '@/app/components/utils/CustomLoading';
 import CustomError from '@/app/components/utils/CustomError';
 import { useGetUserByIdQuery } from '@/redux/api/userAPI';
@@ -8,9 +7,9 @@ import UserStats from '@/app/components/utils/UserStats';
 import UserCarList from '@/app/components/post/UserCarList';
 
 
-const Dashboard = ({params}: {params: {id: string}}) => {
+const Page = ({params}: {params: {id: string}}) => {
   const id = params.id;
-  const {isLoading, isError, isSuccess, data, error} = useGetUserByIdQuery(id)
+  const {isLoading, isError, isSuccess, data, error} = useGetCarDetailsQuery(id)
   
 
   if(isLoading)
@@ -24,17 +23,15 @@ const Dashboard = ({params}: {params: {id: string}}) => {
   
   return (
     <div className="flex px-12">
-        <div className="p-8">
-          <h1 className="text-3xl font-bold mb-6">Welcome, {data.user.fullName}</h1>
+        <div>
 
-          <UserStats id={id} />
-          <RentalsTable />
-          <UserCarList id={id} />
- 
-         
         </div>
+        <div>
+            
+        </div>
+        
     </div>
   );
 };
 
-export default Dashboard;
+export default Page;

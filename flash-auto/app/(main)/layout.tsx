@@ -34,7 +34,7 @@ const layout = ({
               
           <Header />
   
-          <div className="bg-gray-100">
+          <div className="bg-applecore">
               {children}
   
           </div>

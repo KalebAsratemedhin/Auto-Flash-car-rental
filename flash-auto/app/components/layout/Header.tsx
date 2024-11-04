@@ -2,14 +2,21 @@
 import { useSession } from 'next-auth/react';
 import AuthHeader from './AuthHeader';
 import Link from 'next/link';
+import { FiMenu } from "react-icons/fi";
+import { useDispatch } from 'react-redux';
+import { toggle } from '@/redux/slices/sideBarSlice';
 
 const Header = () => {
   const session = useSession()
+  const dispatch = useDispatch()
 
   return (
     <div className="flex items-center justify-between h-20 bg-white shadow-md px-4">
-      <div className="text-2xl text-red-400">
-        <img src="/logo-1.ico" className='w-20 h-20' alt="" />
+      <div className='flex gap-4 items-center'>
+        <FiMenu onClick={() => dispatch(toggle())} className='w-8 h-8 hover:cursor-pointer' />
+        <div className="text-2xl text-red-400">
+          <img src="/logo-1.ico" className='w-20 h-20' alt="" />
+        </div>
       </div>
 
       <nav className='flex justify-between gap-12'>

@@ -4,6 +4,7 @@ import { userAPI } from "./api/userAPI";
 import authReducer from '@/redux/slices/authSlice'
 import { postAPI } from "./api/postAPI";
 import { rentAPI } from "./api/rentAPI";
+import sidebarReducer from '@/redux/slices/sideBarSlice';
 
 export const store = configureStore({
     reducer: {
@@ -11,7 +12,9 @@ export const store = configureStore({
         [userAPI.reducerPath]: userAPI.reducer,
         [postAPI.reducerPath]: postAPI.reducer,
         [rentAPI.reducerPath]: rentAPI.reducer,
-        auth: authReducer
+        auth: authReducer,
+        sidebar: sidebarReducer
+
         
     },
     middleware: getDefaultMiddleware =>
@@ -20,6 +23,7 @@ export const store = configureStore({
           .concat(userAPI.middleware)
           .concat(postAPI.middleware)
           .concat(rentAPI.middleware)
+
 
 
 

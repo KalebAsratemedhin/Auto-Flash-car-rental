@@ -36,11 +36,19 @@ export const postAPI = createApi({
                 url: `?owner=${userId}`,
                 method: 'GET'
             })
-        })
+        }),
+        getAllPosts: builder.query<{data: Post[], totalPages: number, currentPage: number}, {page: number, limit: number, filter: string}>({
+            query: ({ page = 1, limit = 10, filter='all' }) => ({
+                url: `/all?page=${page}&limit=${limit}&filter=${filter}`,
+                method: 'Get'
+            })
+        }),
+
     })
 });
 
 export const { 
     useGetUserPostsQuery,
-    useCreatePostMutation
+    useCreatePostMutation,
+    useGetAllPostsQuery
  } = postAPI;

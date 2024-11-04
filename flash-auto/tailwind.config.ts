@@ -11,6 +11,8 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        blueberry: '#6B7A8F',
+        applecore: '#DCC7AA'
       },
     },
   },
