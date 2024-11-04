@@ -48,14 +48,32 @@ const getCurrentUserCars = async (req, res) => {
   };
 
 const getAllCars = async (req, res) => {
+
     try {
       
-      const cars = await Car.find();
+      const { page = 1, limit = 10, filter } = req.query;
+      const skip = (page - 1) * limit;
+      let cars;
+
+      if(filter === 'all'){
+        cars = await Car.find().skip(skip).limit(parseInt(limit));
+
+      } else {
+        cars = await Car.find({make: filter}).skip(skip).limit(parseInt(limit));
+      }
+
+      
+      const totalCars = await Car.countDocuments()
   
-      console.log('cars', cars)
-  
-      res.status(201).json({ message: 'Cars fetched successfully', data: cars });
+      res.status(201).json({ 
+        message: 'Cars fetched successfully', 
+        data: cars, 
+        totalPages: Math.ceil(totalCars/ limit), 
+        currentPage: page 
+      });
+
     } catch (error) {
+      console.error(error)
       res.status(500).json({ message: 'Error fetching cars', error: error.message });
     }
 };

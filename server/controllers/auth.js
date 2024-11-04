@@ -3,9 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const secret = process.env.JWT_SECRET;
 
-
-
-
+ 
 const signup = async (req, res) => {
     try {
         console.log('body', req.body)

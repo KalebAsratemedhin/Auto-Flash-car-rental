@@ -6,8 +6,8 @@ const upload = require('../middleware/fileUpload')
 
 router.post('/', authenticateUser, upload.single('photo'), postCar);
 router.get('/current-user', authenticateUser, getCurrentUserCars);
+router.get('/all', getAllCars);
 router.get('/:carId', getOneCar);
-router.get('/:id', getAllCars);
 router.get('/', getUserCars);
 
 
