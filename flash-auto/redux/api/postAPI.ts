@@ -43,6 +43,12 @@ export const postAPI = createApi({
                 method: 'Get'
             })
         }),
+        getCarDetails: builder.query<{data: Post}, string>({
+            query: (id) => ({
+                url: `/${id}`,
+                method: 'Get'
+            })
+        }),
 
     })
 });
@@ -50,5 +56,6 @@ export const postAPI = createApi({
 export const { 
     useGetUserPostsQuery,
     useCreatePostMutation,
-    useGetAllPostsQuery
+    useGetAllPostsQuery,
+    useGetCarDetailsQuery
  } = postAPI;

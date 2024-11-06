@@ -6,8 +6,14 @@ const Sidebar = () => {
 
     const paths = ['dashboard', 'settings', 'rents', 'users']
   return (
-    <div className="w-64 h-screen bg-gray-800 text-white  p-5">
-        <h1 className="text-2xl font-bold mb-6">AutoFlash</h1>
+    <div className="w-64 h-screen bg-gray-800 text-white  p-5 ">
+        
+        <div className="flex justify-between">
+            <h1 className="text-2xl font-bold mb-6">AutoFlash</h1>
+            
+
+
+        </div>
         <ul>
             {
                 paths.map((curr, index) => {

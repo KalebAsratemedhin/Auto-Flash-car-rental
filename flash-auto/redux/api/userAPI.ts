@@ -17,13 +17,13 @@ export const userAPI = createApi({
         }
     }),
     endpoints: (builder) => ({
-        getCurrentUser: builder.query<User, void>({
+        getCurrentUser: builder.query<{data: User}, void>({
             query: () => ({
                 url: '/current-user',
                 method: 'GET'
             })
         }),
-        getUserById: builder.query<User, string>({
+        getUserById: builder.query<{data: User}, string>({
             query: (userId) => ({
                 url: `/${userId}`,
                 method: 'GET'

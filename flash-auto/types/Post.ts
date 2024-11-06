@@ -26,3 +26,29 @@ export type CreatePost = {
     photo: Blob;
 
 }
+
+export type AverageRating = {
+    averageScore: number;
+    reviews: number;
+}
+
+export type Rating = {
+    score: number;
+    userId: string;
+    carId: string;
+}
+
+export type Comment = {
+    _id: string;
+    content: string;
+    userId: string;
+    carId: string;
+}
+
+export type PopulatedComment = {
+    _id: string;
+    content: string;
+    userId: User;
+    createdAt: string;
+    carId: string;
+}

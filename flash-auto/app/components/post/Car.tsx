@@ -1,4 +1,5 @@
 import { Post } from '@/types/Post';
+import Link from 'next/link';
 import React from 'react'
 
 const Car = ({car}:{car: Post}) => {
@@ -28,12 +29,12 @@ const Car = ({car}:{car: Post}) => {
           {car.isAvailable ? 'Available' : 'Not Available'}
         </p> */}
         <div className="mt-4 flex justify-end">
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200"
-            onClick={() => handleViewDetails(car._id)}
+          <Link
+            className="text-blue-500 px-4 py-2 rounded-lg hover:text-blue-600 transition duration-200"
+            href={`/post/${car._id}`}
           >
             View Details
-          </button>
+          </Link>
         </div>
       </div>
     </div>

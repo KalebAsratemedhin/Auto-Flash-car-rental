@@ -22,7 +22,7 @@ const CustomError = ({ error, duration=1000}: { error: SerializedError | FetchBa
     <div className="flex items-center justify-center h-20 bg-red-100">
       <div className="text-center">
         <h2 className="text-3xl font-semibold text-red-600">Error</h2>
-        <p className="mt-2 text-red-500">{err.data.message || err.message || 'Something went wrong!'}</p>
+        <p className="mt-2 text-red-500">{err.data?.message || err?.message || 'Something went wrong!'}</p>
       </div>
     </div>
   );

@@ -23,13 +23,19 @@ const Dashboard = ({params}: {params: {id: string}}) => {
   
   
   return (
-    <div className="flex px-12">
+    <div className=" mx-20">
         <div className="p-8">
           <h1 className="text-3xl font-bold mb-6">Welcome, {data.user.fullName}</h1>
 
-          <UserStats id={id} />
-          <RentalsTable />
-          <UserCarList id={id} />
+          <div className='my-8'>
+            <UserStats id={id} />
+          </div>
+          <div className='my-8'>
+            <RentalsTable />
+          </div>
+          <div className='my-8'>
+            <UserCarList id={id} />
+          </div>
  
          
         </div>

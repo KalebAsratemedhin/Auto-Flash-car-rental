@@ -80,7 +80,7 @@ import { useState, useEffect } from "react";
 const Page = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState("all");
   const [filteredCars, setFilteredCars] = useState<Post[]>([]);
 
   // Fetch cars based on server-side filters
@@ -125,7 +125,7 @@ const Page = () => {
             onChange={(e) => setFilter(e.target.value)}
             className="p-2 border border-gray-300 rounded-lg w-full md:w-1/4"
           >
-            <option value="">All</option>
+            <option value="all">All</option>
             <option value="sedan">Sedan</option>
             <option value="suv">SUV</option>
             <option value="truck">Truck</option>
