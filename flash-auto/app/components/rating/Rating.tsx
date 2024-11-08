@@ -4,6 +4,7 @@ import CustomError from '../utils/CustomError';
 import CustomSuccess from '../utils/CustomSuccess';
 
 const StarRating = ({carId}:{carId: string} ) => {
+  // const rating = 0
   const [hover, setHover] = useState(0);
   const {isLoading, isSuccess, isError, data, error} = useGetUserRatingQuery(carId)
   const [createRating, {isSuccess: isRatingSuccess, isError: isRatingError }] = useCreateRatingMutation()
@@ -12,18 +13,23 @@ const StarRating = ({carId}:{carId: string} ) => {
     await createRating({carId, score});
   };
 
+  if(isSuccess){
+    console.log('rating', data.data)
+  }
+
   return (
     <div className="flex">
 
       {isRatingSuccess && <CustomSuccess message="Created Successfully" /> }
       {isRatingError && <CustomError error={error} /> }
+      {/* {isSuccess && data.data.toString()} */}
 
       {[1, 2, 3, 4, 5].map((star) => (
         <svg
           key={star}
           className={`w-6 h-6 cursor-pointer ${
             
-            star <= (isSuccess ? data?.data?.score : hover) ? 'text-yellow-400' : 'text-gray-300'
+            star <= (hover > 0 ? hover : (data?.data?.score!)) ? 'text-yellow-400' : 'text-gray-300'
           }`}
           onClick={() => handleRating(star)}
           onMouseEnter={() => setHover(star)}
