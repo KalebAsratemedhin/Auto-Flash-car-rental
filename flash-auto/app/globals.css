@@ -62,3 +62,9 @@ body {
 .animate-swoopIn {
   animation: swoopIn 1s ease-out forwards;
 }
+
+
+.dark {
+  --background-color: #1A1A1A;
+  --foreground-color: #E0E0E0; 
+}

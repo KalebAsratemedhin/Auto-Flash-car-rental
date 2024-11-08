@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import ThemeToggler from "../utils/ThemeToggler"
 
 const Sidebar = () => {
     const path = usePathname()
@@ -35,6 +36,7 @@ const Sidebar = () => {
         <li className="mb-4 border-l-red-400 border-l pl-4">
             <Link href={`/users`} className="hover:text-gray-400">Users</Link>
         </li> */}
+        <ThemeToggler />
         </ul>
     </div>
   )

@@ -37,7 +37,7 @@ const Page = ({params}: {params: {id: string}}) => {
             
           />
 
-          <div className=" bg-white rounded-md p-4 flex-grow">
+          <div className=" bg-lavender shadow-[#D9D5D0] rounded-md p-4 flex-grow">
             <div className="flex flex-col gap-4">
               <h1 className="text-4xl font-bold text-gray-800">{car.make} {car.model}</h1>
               <div className="flex items-center text-yellow-500">
@@ -76,7 +76,7 @@ const Page = ({params}: {params: {id: string}}) => {
 
         </div>
           
-        <div className="bg-gray-100 p-6 rounded-lg space-y-2 text-gray-700">
+        <div className="bg-lavender shadow-[#D9D5D0] p-6 rounded-lg space-y-2 text-gray-700">
           <h2 className="text-2xl font-semibold text-gray-800">Car Specifications</h2>
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <li><span className="font-semibold">Make:</span> {car.make}</li>
@@ -89,10 +89,10 @@ const Page = ({params}: {params: {id: string}}) => {
         </div>
         <div className='w-full flex gap-2 '>
           
-          <div className="bg-gray-100 p-6 rounded-lg space-y-2 text-gray-700 flex-grow h-[500px]">
+          <div className="bg-gray-200 p-6 rounded-lg space-y-2 text-gray-700 flex-grow h-[500px]">
             <CommentSection carId={id} />
           </div>
-          <div className="bg-gray-100 p-6 rounded-lg space-y-2 text-gray-700 flex-grow h-[400px]">
+          <div className="bg-gray-200 p-6 rounded-lg space-y-2 text-gray-700 flex-grow h-[400px]">
             <CreateComment carId={id} />
           </div>
         </div>

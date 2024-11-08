@@ -7,6 +7,7 @@ import { rentAPI } from "./api/rentAPI";
 import sidebarReducer from '@/redux/slices/sideBarSlice';
 import { ratingAPI } from "./api/ratingAPI";
 import { commentAPI } from "./api/commentAPI";
+import themeReducer from './slices/themeSlice';
 
 export const store = configureStore({
     reducer: {
@@ -18,8 +19,8 @@ export const store = configureStore({
         [commentAPI.reducerPath]: commentAPI.reducer,
 
         auth: authReducer,
-        sidebar: sidebarReducer
-
+        sidebar: sidebarReducer,
+        theme: themeReducer
         
     },
     middleware: getDefaultMiddleware =>
