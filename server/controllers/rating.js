@@ -6,7 +6,15 @@ const addRating = async (req, res) => {
     const { score } = req.body;
     const userId = req.user.id; 
 
-    console.log('carId, score, userId', carId, score, userId)
+    const existing = await Rating.findOne({carId, userId})
+
+    if(existing){
+      existing.score = score
+      await existing.save()
+      return res.status(200).json({message: 'updated rating successfully', data: existing.toObject()});
+    }
+
+    console.log('new rating carId, score, userId', carId, score, userId)
     const rating = await Rating.create({ userId, carId, score });
 
     console.log('rating', rating)
@@ -39,7 +47,7 @@ const getRatingsByCar = async (req, res) => {
 
 const getOneRating = async (req, res) => {
     try {
-      const {userId} = req.user.id
+      const userId = req.user.id
       const { carId } = req.params;
       const rating = await Rating.findOne({ carId, userId });
 
@@ -48,6 +56,7 @@ const getOneRating = async (req, res) => {
       res.status(200).json({ message: 'Rating fetched successfully', data: rating });
 
     } catch (error) {
+      console.error(error)
       res.status(500).json({ message: "Error fetching ratings", error });
     }
   };
