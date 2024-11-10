@@ -60,7 +60,7 @@ const getUserById =  async(req, res) => {
         const user = await User.findById(id)
 
 
-        res.status(201).json({message: "User found.", user: user.toObject() })
+        res.status(201).json({message: "User found.", data: user.toObject() })
 
         
     } catch (error) {

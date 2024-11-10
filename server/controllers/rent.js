@@ -3,21 +3,29 @@ const Car = require('../models/car');
 
 const createRent = async (req, res) => {
   try {
-    const { name, contact, duration, carId } = req.body;
-    const { username } = req.user;
+    const { startDate, endDate } = req.body;
+    const userId = req.user.id;
+    const {carId} = req.params
 
-    const car = await Car.findById(carId);
+
+
+    const car = await Car.findById(carId).populate('owner');
     if (!car) {
       return res.status(404).json({ message: 'Car not found' });
     }
 
+    if(userId === car.owner._id.toString() ){
+      return res.status(404).json({ message: 'You cannot rent your own car.' });
+    }
+
+
     const rent = await Rent.create({
-      name,
-      contact,
-      duration,
+      startDate,
+      endDate,
+      pricePerDay: car.price,
       car: carId,
-      renter: car.username,
-      rentee: username,
+      renter: car.owner._id,
+      rentee: userId,
     });
 
     res.status(201).json({ message: 'Rental request created successfully', data: rent });
@@ -27,23 +35,24 @@ const createRent = async (req, res) => {
   }
 };
 
-const approveRent = async (req, res) => {
+const evaluateRent = async (req, res) => {
     try {
-      const { rentId } = req.body;
-      const { username } = req.user; 
+      const { rentId } = req.params;
+      const { status } = req.body;
+      const { id } = req.user; 
   
       const rent = await Rent.findById(rentId);
       if (!rent) {
-        return res.status(404).json({ message: 'Rental request not found' });
+        return res.status(404).json({ message: 'Rent not found' });
       }
   
-      if (rent.renter !== username) {
-        return res.status(403).json({ message: 'You are not authorized to approve this rental' });
+      if (rent.renter !== id) {
+        return res.status(403).json({ message: 'You are not authorized to evaluate this rental' });
       }
   
       const updatedRent = await Rent.findByIdAndUpdate(
         rentId,
-        { status: 'active' },
+        { status: status },
         { new: true }
       );
   
@@ -54,41 +63,14 @@ const approveRent = async (req, res) => {
     }
   };
   
-  const confirmReturn = async (req, res) => {
-    try {
-      const { rentId } = req.body;
-      const { username } = req.user; 
-
-      const rent = await Rent.findById(rentId);
-      if (!rent) {
-        return res.status(404).json({ message: 'Rental not found' });
-      }
-  
-      if (rent.renter !== username) {
-        return res.status(403).json({ message: 'You are not authorized to confirm return for this rental' });
-      }
-  
-      const updatedRent = await Rent.findByIdAndUpdate(
-        rentId,
-        { status: 'returned' },
-        { new: true }
-      );
-  
-      res.status(200).json({ message: 'Rental returned successfully', data: updatedRent });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Failed to confirm return' });
-    }
-  };
-  
   const getCurrentUserRents = async (req, res) => {
     try {
-      const { username } = req.user;
+      const { id } = req.user;
   
       const rents = await Rent.find({
         $or: [
-          { rentee: username },  
-          { renter: username }   
+          { rentee: id },  
+          { renter: id }   
         ]
       }).populate('car'); 
   
@@ -100,12 +82,20 @@ const approveRent = async (req, res) => {
   };
   
 
-const getRentRequests = async (req, res) => {
+const cancelRent = async (req, res) => {
   try {
-    const { username } = req.user;
+    const {rentId} = req.params
+    const {id} = req.user
 
-    const rentRequests = await Rent.find({ renter: username}).populate('car');
-    res.status(200).json({ message: 'Rent requests retrieved successfully', data: rentRequests });
+    const rent = await Rent.findById(rentId)
+
+    if(rent.rentee.toString() === id){
+      await rent.deleteOne()
+      return res.status(200).json({ message: 'Rent cancelled successfully' });
+
+    }
+    return res.status(401).json({ message: 'Unauthorized.' });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Failed to retrieve rent requests' });
@@ -114,8 +104,7 @@ const getRentRequests = async (req, res) => {
 
 module.exports = { 
   createRent, 
-  approveRent, 
-  confirmReturn, 
+  evaluateRent,  
   getCurrentUserRents, 
-  getRentRequests 
+  cancelRent 
 };
