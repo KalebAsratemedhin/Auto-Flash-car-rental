@@ -33,7 +33,9 @@ export const authOptions: NextAuthOptions = {
 
           const data = await result.json()
 
-          if (data) {
+      
+
+          if (result.ok && data) {
             return data;
           } else {
             return null;
@@ -58,6 +60,10 @@ export const authOptions: NextAuthOptions = {
           });
 
           const data = await res.json();
+
+          if(!res.ok){
+            return false
+          }
 
           // Check if the backend response contains user data
           if (data) {

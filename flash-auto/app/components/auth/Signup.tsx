@@ -8,29 +8,20 @@ import CustomError from "../utils/CustomError";
 import { useSignupMutation } from "@/redux/api/authAPI";
 import { useRouter } from "next/navigation";
 import CustomLoading from "../utils/CustomLoading";
-import { SignupCredential } from "@/types/User";
 import { signIn } from "next-auth/react";
-
-
-interface FormData {
-  password: string;
-  fullName: string;
-  email: string;
-  phoneNumber: string;
-}
+import { SignupCredential } from "@/types/User";
 
 const Signup = () => {
-  const { formState: { errors, isValid }, register, handleSubmit } = useForm<FormData>({
+  const { formState: { errors, isValid }, register, handleSubmit } = useForm<SignupCredential>({
     mode: 'onChange'
   });
 
   const [signupUser, { isError, isLoading, isSuccess, error, data: signupData }] = useSignupMutation();
   const router = useRouter();
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: SignupCredential) => {
     if (isValid) {
-      const result = await signupUser(data as SignupCredential);
-      console.log('result signup', result);
+      const result = await signupUser(data);
     }
   };
 
@@ -47,7 +38,7 @@ const Signup = () => {
       <h1 className="text-3xl text-blue-950 font-semibold mb-2">Welcome to AutoFlash!</h1>
       <p className="text-3xl text-red-400 font-semibold mt-5">Signup</p>
 
-      <div className="p-10 ">
+      <div className="p-10 w-full ">
         <div className="py-5 w-full">
           <button onClick={() => signIn('google')} className="border p-2 w-full flex justify-center items-center gap-2 rounded-md text-gray-600 hover:shadow-sm"> <FcGoogle className="w-8 h-8" /> Sign in with Google</button>        
         </div>
@@ -59,7 +50,7 @@ const Signup = () => {
         {isError && <CustomError error={error} />}
 
 
-        <form noValidate onSubmit={handleSubmit(onSubmit)}>
+        <form noValidate onSubmit={handleSubmit(onSubmit)} className="w-full">
 
           <TextField
             label="Fullname"

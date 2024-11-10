@@ -35,6 +35,12 @@ const Car = ({car}:{car: Post}) => {
           >
             View Details
           </Link>
+          <Link
+            className="text-blue-500 px-4 py-2 rounded-lg hover:text-blue-600 transition duration-200"
+            href={`/rent/${car._id}`}
+          >
+            Rent
+          </Link>
         </div>
       </div>
     </div>

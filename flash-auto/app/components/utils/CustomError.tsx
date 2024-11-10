@@ -4,7 +4,7 @@ import { SerializedError } from '@reduxjs/toolkit';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useEffect, useState } from 'react';
 
-const CustomError = ({ error, duration=1000}: { error: SerializedError | FetchBaseQueryError | string | undefined, duration?: number}) => {
+const CustomError = ({ error, duration=100000}: { error: SerializedError | FetchBaseQueryError | string | undefined, duration?: number}) => {
   const err = error as CustomSerializedError
   const [visible, setVisible] = useState(true);
 

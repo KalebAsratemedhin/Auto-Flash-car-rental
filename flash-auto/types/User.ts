@@ -56,3 +56,9 @@ export interface AdminStats{
 }
 
 
+export interface SignupCredential{
+    fullName: string;
+    password: string;
+    email: string;
+    phoneNumber: string;
+}

@@ -7,6 +7,7 @@ import { useGetCarDetailsQuery } from '@/redux/api/postAPI';
 import StarRating from '@/app/components/rating/Rating';
 import CreateComment from '@/app/components/comment/CreateComment';
 import CommentSection from '@/app/components/comment/CommentList';
+import Link from 'next/link';
 
 
 
@@ -67,7 +68,7 @@ const Page = ({params}: {params: {id: string}}) => {
               </button>
               <button className="p-3 flex items-center justify-center rounded-full shadow-lg bg-gray-100 text-gray-700">
                 <FiMessageCircle size={24} />
-                <span className="ml-2">Rent Car</span>
+                <Link href={`/rent/${car._id}`}>Rent Car</Link>
               </button>
             </div>
             

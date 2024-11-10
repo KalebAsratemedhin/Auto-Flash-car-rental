@@ -6,6 +6,7 @@ import CustomError from '@/app/components/utils/CustomError';
 import { useGetUserByIdQuery } from '@/redux/api/userAPI';
 import UserStats from '@/app/components/utils/UserStats';
 import UserCarList from '@/app/components/post/UserCarList';
+import RentalsList from '@/app/components/rent/RentalsList';
 
 
 const Dashboard = ({params}: {params: {id: string}}) => {
@@ -25,13 +26,13 @@ const Dashboard = ({params}: {params: {id: string}}) => {
   return (
     <div className=" mx-20">
         <div className="p-8">
-          <h1 className="text-3xl font-bold mb-6">Welcome, {data.user.fullName}</h1>
+          <h1 className="text-3xl font-bold mb-6">Welcome, {data.data.fullName}</h1>
 
           <div className='my-8'>
             <UserStats id={id} />
           </div>
           <div className='my-8'>
-            <RentalsTable />
+            <RentalsList />
           </div>
           <div className='my-8'>
             <UserCarList id={id} />
