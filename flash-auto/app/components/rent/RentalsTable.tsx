@@ -6,12 +6,12 @@ import CustomError from "../utils/CustomError"
 
 const RentalsTable = ({rents}: {rents: RentPopulated[]}) => {
     const auth = useSession()
-    const [approveRent, {isLoading, isError, isSuccess}] = useEvaluateRentMutation()
-    const [cancelRent, {isLoading: isCancelLoading, isError: isCancelError, isSuccess: isCancelSuccess, error: cancelError}] = useCancelRentMutation()
+    const [evaluateRent, { isError, isSuccess, error}] = useEvaluateRentMutation()
+    const [cancelRent, {isError: isCancelError, isSuccess: isCancelSuccess, error: cancelError}] = useCancelRentMutation()
 
 
     const handleApprove = async (id: string) => {
-        await approveRent({update: {status: 'active'}, rentId: id})
+        await evaluateRent({update: {status: 'active'}, rentId: id})
     }
 
     const handleCancel = async (id: string) => {
@@ -19,7 +19,7 @@ const RentalsTable = ({rents}: {rents: RentPopulated[]}) => {
     }
 
     const handleReturn = async (id: string) => {
-        await approveRent({update: {status: 'returned'}, rentId: id})
+        await evaluateRent({update: {status: 'returned'}, rentId: id})
     }
 
     
@@ -74,6 +74,8 @@ const RentalsTable = ({rents}: {rents: RentPopulated[]}) => {
         </tbody>
         {isCancelSuccess && <CustomSuccess message='Successfully cacelled' /> }
         {isCancelError && <CustomError error={cancelError} /> }
+        {isSuccess && <CustomSuccess message='Successfully evaluated.' /> }
+        {isError && <CustomError error={error} /> }
 
     </table>
   )
