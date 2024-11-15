@@ -1,6 +1,6 @@
 import express from 'express';
 import { createRent, cancelRent, evaluateRent, getCurrentUserRents } from '../controllers/rent.js';
-import authenticateUser from '../middleware/auth.js';
+import {authenticateUser, isAdmin, isSuperAdmin} from '../middleware/auth.js';
 
 const router = express.Router();
 

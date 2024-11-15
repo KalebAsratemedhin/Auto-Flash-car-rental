@@ -8,7 +8,6 @@ export const createRent = async (req, res) => {
     const {carId} = req.params
 
  
-
     const car = await Car.findById(carId).populate('owner');
     if (!car) {
       return res.status(404).json({ message: 'Car not found' });
@@ -16,6 +15,12 @@ export const createRent = async (req, res) => {
 
     if(userId === car.owner._id.toString() ){
       return res.status(404).json({ message: 'You cannot rent your own car.' });
+    }
+
+
+    if (car.available == 0){
+      return res.status(404).json({ message: 'Car not available.' });
+
     }
 
 
@@ -27,6 +32,9 @@ export const createRent = async (req, res) => {
       renter: car.owner._id,
       rentee: userId,
     });
+
+    car.available -= 1
+    await car.save()
 
     res.status(201).json({ message: 'Rental request created successfully', data: rent });
   } catch (error) {

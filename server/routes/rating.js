@@ -1,6 +1,6 @@
 import express from 'express';
 import {addRating, getRatingsByCar, deleteRating, getOneRating, updateRating} from '../controllers/rating.js';
-import authenticateUser from '../middleware/auth.js';
+import {authenticateUser, isAdmin, isSuperAdmin} from '../middleware/auth.js';
 const router = express.Router();
 
 

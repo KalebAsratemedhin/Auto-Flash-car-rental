@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 
-const authenticateUser = (req, res, next) => {
+export const authenticateUser = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; 
     
@@ -11,12 +11,23 @@ const authenticateUser = (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded;
-        console.log('req.user', req.user, 'middleware')
         next();
     } catch (error) {
         res.status(400).json({ message: 'Invalid token.' });
     }
 };
 
-export default authenticateUser;
+export const isAdmin = (req, res, next) => {
+    if (req.user.role !== 'admin' || req.user.role !== 'super-admin') {
+        return res.status(403).json({ message: 'Access denied. Admins only.' });
+    }
+    next();
+}; 
+
+export const isSuperAdmin = (req, res, next) => {
+    if (req.user.role !== 'super-admin') {
+        return res.status(403).json({ message: 'Access denied. Super Admins only.' });
+    }
+    next();
+}; 
 

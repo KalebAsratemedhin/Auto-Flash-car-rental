@@ -1,5 +1,5 @@
 const responseMiddleware = (req, res, next) => {
-    res.success = (message, data = null, statusCode = 200) => {
+    res.success = (message,  statusCode = 200, data = null) => {
         res.status(statusCode).json({
             success: true,
             message,

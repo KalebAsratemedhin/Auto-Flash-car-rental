@@ -1,15 +1,14 @@
 import express from 'express';
-import { postCar, getCurrentUserCars, getAllCars, getOneCar, getUserCars } from '../controllers/post.js';
-import authenticateUser from '../middleware/auth.js';
+import { postCar, getAllCars, getOneCar, getAdminCars } from '../controllers/post.js';
+import {authenticateUser, isAdmin} from '../middleware/auth.js';
 import upload from '../middleware/fileUpload.js';
 
 const router = express.Router();
 
-router.post('/', authenticateUser, upload.single('photo'), postCar);
-router.get('/current-user', authenticateUser, getCurrentUserCars);
-router.get('/all', getAllCars);
+router.post('/', authenticateUser, isAdmin, upload.single('photo'), postCar);
 router.get('/:carId', getOneCar);
-router.get('/', getUserCars);
+router.get('/admins/:userId', authenticateUser, isAdmin, getAdminCars);
+router.get('/', getAllCars);
 
 
 

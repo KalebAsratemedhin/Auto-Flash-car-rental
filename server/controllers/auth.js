@@ -7,14 +7,13 @@ const secret = process.env.JWT_SECRET;
  
 export const signup = async (req, res) => {
     try {
-        console.log('body', req.body)
         const { fullName, password, email, phoneNumber } = req.body;
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const duplicate = await User.findOne({ email });
 
         if (duplicate) {
-            return res.status(409).json({ message: 'Duplicate account found.' });
+            return res.error('Duplicate account found.', 409, []);
         }
 
         const user = await User.create({
@@ -27,10 +26,10 @@ export const signup = async (req, res) => {
         const payload = { id: user._id, role: user.role };
         const token = jwt.sign(payload, secret, { expiresIn: '1h' });
 
-        res.status(201).json({ accessToken: token, id: user._id, role: user.role });
+        res.success('Sign up successful.', 201, { accessToken: token, id: user._id, role: user.role })
 
     } catch (error) {
-        res.status(500).json({ message: 'Server Error.' });
+        res.error('Internal server error.', 500, [error]);
     }
 };
 
@@ -54,53 +53,43 @@ export const signin = async (req, res) => {
 
         res.status(200).json({ accessToken: token, id: user._id, role: user.role });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.error('Internal server error.', 500, [error]);
     }
 };
 
 
 export const googleAuth= async (req, res) => {
-    const {id, name, email, image} = req.body
 
-    let user = await User.findOne({ email });
-
-    if (!user) {
-        user = await User.create({
-            fullName: name,
-            email: email,
-            googleId: id,
-            profilePic: image,
-        });
-    }
-
-    if (user && !user.googleId){
-        return res.status(403).json({message: "Another signin option exists."})
-    }
-
-
-
-    const payload = { id: user._id, role: user.role };
-    const token = jwt.sign(payload, secret, { expiresIn: '2h' });
-
-    res.status(200).json({ accessToken: token, id: user._id, role: user.role, name: user.fullName, email: user.email, image: user.profilePic});
-
-};
-
-
-
-export const updateUserProfile = async (req, res) => {
     try {
-        const { id } = req.user;
-        const update = req.body;
+        const {id, name, email, image} = req.body
 
-        const updatedUser = await User.findByIdAndUpdate(id, update, { new: true });
+        let user = await User.findOne({ email });
 
-        if (!updatedUser) {
-            return res.status(404).json({ message: 'User not found' });
+        if (!user) {
+            user = await User.create({
+                fullName: name,
+                email: email,
+                googleId: id,
+                profilePic: image,
+            });
         }
 
-        res.status(200).json(updatedUser);
+        if (user && !user.googleId){
+            return res.error('Another signin option exists.', 400, [])
+        }
+
+
+
+        const payload = { id: user._id, role: user.role };
+        const token = jwt.sign(payload, secret, { expiresIn: '2h' });
+
+        res.success('Google auth successful', 200, { accessToken: token, id: user._id, role: user.role, name: user.fullName, email: user.email, image: user.profilePic});
+
+        
     } catch (error) {
-        res.status(500).json({ message: 'Internal Server Error.' });
+        res.error('Internal server error.', 500, [error]);
     }
+    
 };
+
+

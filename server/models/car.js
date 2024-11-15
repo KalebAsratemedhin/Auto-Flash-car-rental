@@ -11,6 +11,7 @@ const carSchema = new mongoose.Schema({
   model: { type: String, required: true },
   age: { type: Number, required: true },
   count: { type: Number, required: true },
+  available: { type: Number, required: true },
   price: { type: Number, required: true },
   description: { type: String, required: true },
   photo: { type: String, required: true }, 
