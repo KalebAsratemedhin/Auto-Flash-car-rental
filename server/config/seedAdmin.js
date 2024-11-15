@@ -1,9 +1,8 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-require('dotenv').config(); 
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
-const User = require('../models/user'); 
-const connectDatabase = require('./db');
+import User from '../models/user.js'; 
+import connectDatabase from './db.js';
 
 const seedAdmin = async () => {
   try {

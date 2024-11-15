@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const rentSchema = new mongoose.Schema({
   car: { type: mongoose.Schema.Types.ObjectId, ref: 'Car', required: true },
@@ -43,4 +43,4 @@ rentSchema.pre('save', function (next) {
 });
 
 const Rent = mongoose.model('Rent', rentSchema);
-module.exports = Rent;
+export default Rent;

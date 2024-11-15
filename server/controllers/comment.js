@@ -1,6 +1,6 @@
-const Comment = require("../models/comment");
+import Comment from "../models/comment.js";
 
-const addComment = async (req, res) => {
+export const addComment = async (req, res) => {
   try {
     console.log('comment', req.body)
     const { carId, content } = req.body;
@@ -19,7 +19,7 @@ const addComment = async (req, res) => {
   }
 };
 
-const getCommentsByCar = async (req, res) => {
+export const getCommentsByCar = async (req, res) => {
   try {
     const { carId } = req.params;
     const comments = await Comment.find({ carId }).populate("userId");
@@ -30,7 +30,7 @@ const getCommentsByCar = async (req, res) => {
   }
 }; 
 
-const getOneComment = async (req, res) => {
+export const getOneComment = async (req, res) => {
     try {
       const { carId } = req.params;
       console.log('req.user', req.user)
@@ -47,7 +47,7 @@ const getOneComment = async (req, res) => {
 
 
 
-const deleteComment = async (req, res) => {
+export const deleteComment = async (req, res) => {
   try {
     const { commentId } = req.params;
     await Comment.findByIdAndDelete(commentId);
@@ -58,7 +58,7 @@ const deleteComment = async (req, res) => {
 };
 
 
-const updateComment = async (req, res) => {
+export const updateComment = async (req, res) => {
     try {
       console.log('comment update', req.body, req.params)
       const { commentId } = req.params;
@@ -71,13 +71,7 @@ const updateComment = async (req, res) => {
     }
   };
 
-module.exports = {
-    addComment,
-    getCommentsByCar,
-    getOneComment,
-    deleteComment,
-    updateComment
-}
+
 
 
 

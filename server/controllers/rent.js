@@ -1,13 +1,13 @@
-const Rent = require('../models/rent');
-const Car = require('../models/car');
+import Car from '../models/car.js'
+import Rent from '../models/rent.js'
 
-const createRent = async (req, res) => {
+export const createRent = async (req, res) => {
   try {
     const { startDate, endDate } = req.body;
     const userId = req.user.id;
     const {carId} = req.params
 
-
+ 
 
     const car = await Car.findById(carId).populate('owner');
     if (!car) {
@@ -35,7 +35,7 @@ const createRent = async (req, res) => {
   }
 };
 
-const evaluateRent = async (req, res) => {
+export const evaluateRent = async (req, res) => {
     try {
       const { rentId } = req.params;
       const { status } = req.body;
@@ -46,7 +46,7 @@ const evaluateRent = async (req, res) => {
         return res.status(404).json({ message: 'Rent not found' });
       }
   
-      if (rent.renter !== id) {
+      if (rent.renter.toString() !== id) {
         return res.status(403).json({ message: 'You are not authorized to evaluate this rental' });
       }
   
@@ -63,7 +63,7 @@ const evaluateRent = async (req, res) => {
     }
   };
   
-  const getCurrentUserRents = async (req, res) => {
+  export const getCurrentUserRents = async (req, res) => {
     try {
       const { id } = req.user;
   
@@ -82,7 +82,7 @@ const evaluateRent = async (req, res) => {
   };
   
 
-const cancelRent = async (req, res) => {
+export const cancelRent = async (req, res) => {
   try {
     const {rentId} = req.params
     const {id} = req.user
@@ -102,9 +102,3 @@ const cancelRent = async (req, res) => {
   }
 };
 
-module.exports = { 
-  createRent, 
-  evaluateRent,  
-  getCurrentUserRents, 
-  cancelRent 
-};

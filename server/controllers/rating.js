@@ -1,6 +1,6 @@
-const Rating = require("../models/rating");
+import Rating from '../models/rating.js'
 
-const addRating = async (req, res) => {
+export const addRating = async (req, res) => {
   try {
     const {carId} = req.params
     const { score } = req.body;
@@ -26,7 +26,7 @@ const addRating = async (req, res) => {
 };
 
 
-const getRatingsByCar = async (req, res) => {
+export const getRatingsByCar = async (req, res) => {
   try {
     const { carId } = req.params;
     const reviews = await Rating.countDocuments(carId)
@@ -45,7 +45,7 @@ const getRatingsByCar = async (req, res) => {
   }
 };
 
-const getOneRating = async (req, res) => {
+export const getOneRating = async (req, res) => {
     try {
       const userId = req.user.id
       const { carId } = req.params;
@@ -61,7 +61,7 @@ const getOneRating = async (req, res) => {
     }
   };
 
-const deleteRating = async (req, res) => {
+export const deleteRating = async (req, res) => {
   try {
     const { ratingId } = req.params;
     await Rating.findByIdAndDelete(ratingId);
@@ -71,7 +71,7 @@ const deleteRating = async (req, res) => {
   }
 };
 
-const updateRating = async (req, res) => {
+export const updateRating = async (req, res) => {
     try {
       const { ratingId } = req.params;
       await Rating.findByIdAndUpdate(ratingId, req.body);
@@ -80,11 +80,3 @@ const updateRating = async (req, res) => {
       res.status(500).json({ message: "Error deleting rating", error });
     }
   };
-
-module.exports = {
-    addRating,
-    getRatingsByCar,
-    getOneRating,
-    deleteRating,
-    updateRating
-};

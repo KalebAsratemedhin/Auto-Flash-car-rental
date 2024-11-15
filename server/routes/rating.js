@@ -1,7 +1,8 @@
-const express = require("express");
+import express from 'express';
+import {addRating, getRatingsByCar, deleteRating, getOneRating, updateRating} from '../controllers/rating.js';
+import authenticateUser from '../middleware/auth.js';
 const router = express.Router();
-const {addRating, getRatingsByCar, deleteRating, getOneRating, updateRating} = require("../controllers/rating");
-const {authenticateUser} = require("../middleware/auth");
+
 
 router.post("/cars/:carId", authenticateUser, addRating);
 router.get("/cars/:carId/users/current-user", authenticateUser, getOneRating);
@@ -10,4 +11,4 @@ router.delete("/:ratingId", authenticateUser, deleteRating);
 router.put("/:ratingId", authenticateUser, updateRating);
 
 
-module.exports = router;
+export default router;

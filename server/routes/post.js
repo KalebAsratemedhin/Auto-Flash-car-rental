@@ -1,8 +1,9 @@
-const express = require('express');
+import express from 'express';
+import { postCar, getCurrentUserCars, getAllCars, getOneCar, getUserCars } from '../controllers/post.js';
+import authenticateUser from '../middleware/auth.js';
+import upload from '../middleware/fileUpload.js';
+
 const router = express.Router();
-const { postCar, getCurrentUserCars, getAllCars, getOneCar, getUserCars } = require('../controllers/post');
-const { authenticateUser } = require('../middleware/auth');
-const upload = require('../middleware/fileUpload')
 
 router.post('/', authenticateUser, upload.single('photo'), postCar);
 router.get('/current-user', authenticateUser, getCurrentUserCars);
@@ -12,4 +13,4 @@ router.get('/', getUserCars);
 
 
 
-module.exports = router;
+export default router;

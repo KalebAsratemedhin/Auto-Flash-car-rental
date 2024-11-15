@@ -1,10 +1,11 @@
-const User = require('../models/user.js');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken'
+import User from '../models/user.js';
+
 const secret = process.env.JWT_SECRET;
 
  
-const signup = async (req, res) => {
+export const signup = async (req, res) => {
     try {
         console.log('body', req.body)
         const { fullName, password, email, phoneNumber } = req.body;
@@ -34,7 +35,7 @@ const signup = async (req, res) => {
 };
 
 
-const signin = async (req, res) => {
+export const signin = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
@@ -58,7 +59,7 @@ const signin = async (req, res) => {
 };
 
 
-const googleAuth= async (req, res) => {
+export const googleAuth= async (req, res) => {
     const {id, name, email, image} = req.body
 
     let user = await User.findOne({ email });
@@ -86,12 +87,8 @@ const googleAuth= async (req, res) => {
 };
 
 
-const logout = async (req, res) => {
-    res.status(200).json({ success: true, message: 'User logged out successfully' });
-};
 
-
-const updateUserProfile = async (req, res) => {
+export const updateUserProfile = async (req, res) => {
     try {
         const { id } = req.user;
         const update = req.body;
@@ -106,10 +103,4 @@ const updateUserProfile = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Internal Server Error.' });
     }
-};
-
-module.exports = {
-    signup, 
-    signin,
-    googleAuth,
 };

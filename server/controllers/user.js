@@ -1,16 +1,12 @@
-const Car = require('../models/car')
-const Rent = require('../models/rent')
-const User = require('../models/user')
+import Car from '../models/car.js'
+import Rent from '../models/rent.js'
+import User from '../models/user.js'
 
 
-const getUserSummary = async(req, res) => {
+export const getUserSummary = async(req, res) => {
     try {
-
-        console.log('summary of', req.params)
         
         const {id} = req.params
-
-
         const postCount = await Car.countDocuments({owner: id})
         console.log('post coun', postCount)
 
@@ -33,7 +29,7 @@ const getUserSummary = async(req, res) => {
     }
 }
 
-const getCurrentUser =  async(req, res) => {
+export const getCurrentUser =  async(req, res) => {
     try {
         console.log('req.', req.user)
 
@@ -52,7 +48,7 @@ const getCurrentUser =  async(req, res) => {
 
 }
 
-const getUserById =  async(req, res) => {
+export const getUserById =  async(req, res) => {
     try {
 
         const {id} = req.params
@@ -70,8 +66,3 @@ const getUserById =  async(req, res) => {
 
 }
 
-module.exports = {
-    getCurrentUser,
-    getUserSummary,
-    getUserById
-}

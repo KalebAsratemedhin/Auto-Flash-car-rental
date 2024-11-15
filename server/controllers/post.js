@@ -1,6 +1,6 @@
-const Car = require('../models/car');
+import Car from '../models/car.js';
 
-const postCar = async (req, res) => {
+export const postCar = async (req, res) => {
   try {
     console.log('post req', req.body)
     console.log('file', req.file.path)
@@ -31,7 +31,7 @@ const postCar = async (req, res) => {
   }
 };
 
-const getCurrentUserCars = async (req, res) => {
+export const getCurrentUserCars = async (req, res) => {
     try {
       const {username} = req.user
    
@@ -47,7 +47,7 @@ const getCurrentUserCars = async (req, res) => {
     }
   };
 
-const getAllCars = async (req, res) => {
+export const getAllCars = async (req, res) => {
 
     try {
       
@@ -78,7 +78,7 @@ const getAllCars = async (req, res) => {
     }
 };
 
-const getOneCar = async (req, res) => {
+export const getOneCar = async (req, res) => {
   try {
     console.log('req a car', req.params)
 
@@ -94,7 +94,7 @@ const getOneCar = async (req, res) => {
 };
 
 
-const getUserCars = async (req, res) => {
+export const getUserCars = async (req, res) => {
   try {
 
     const {owner} = req.query
@@ -107,4 +107,3 @@ const getUserCars = async (req, res) => {
 };
 
 
-module.exports = { postCar, getCurrentUserCars, getAllCars, getOneCar, getUserCars};
