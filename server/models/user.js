@@ -37,7 +37,11 @@ const userSchema = mongoose.Schema(
         },
         googleId: {  
             type: String
-        }
+        },
+        emailVerified: { type: Boolean, default: false },
+        emailVerificationToken: { type: String },
+        resetPasswordToken: { type: String },
+        resetPasswordExpires: { type: Date },
     },
     {
         timestamps: true,  
