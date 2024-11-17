@@ -6,8 +6,8 @@ const rentSchema = new mongoose.Schema({
   rentee: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, 
   status: { 
     type: String, 
-    enum: ['pending', 'active', 'returned', 'cancelled'], 
-    default: 'pending' 
+    enum: ['active', 'returned', 'cancelled'], 
+    default: 'active' 
   },
   startDate: { type: Date, required: true },  
   endDate: { type: Date, required: true }, 

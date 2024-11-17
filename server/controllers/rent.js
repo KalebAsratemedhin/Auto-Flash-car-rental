@@ -1,28 +1,20 @@
-import Car from '../models/car.js'
-import Rent from '../models/rent.js'
+import Car from '../models/car.js';
+import Rent from '../models/rent.js';
 
 export const createRent = async (req, res) => {
   try {
     const { startDate, endDate } = req.body;
     const userId = req.user.id;
-    const {carId} = req.params
+    const { carId } = req.params;
 
- 
     const car = await Car.findById(carId).populate('owner');
-    if (!car) {
-      return res.status(404).json({ message: 'Car not found' });
+    if (!car) return res.error('Car not found', 404);
+
+    if (userId === car.owner._id.toString()) {
+      return res.error('You cannot rent your own car.', 403);
     }
 
-    if(userId === car.owner._id.toString() ){
-      return res.status(404).json({ message: 'You cannot rent your own car.' });
-    }
-
-
-    if (car.available == 0){
-      return res.status(404).json({ message: 'Car not available.' });
-
-    }
-
+    if (car.available === 0) return res.error('Car not available.', 400);
 
     const rent = await Rent.create({
       startDate,
@@ -33,80 +25,66 @@ export const createRent = async (req, res) => {
       rentee: userId,
     });
 
-    car.available -= 1
-    await car.save()
+    car.available -= 1;
+    await car.save();
 
-    res.status(201).json({ message: 'Rental request created successfully', data: rent });
+    res.success('Rental request created successfully', 201, rent);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Failed to create rental request' });
+    res.error('Failed to create rental request', 500, [error.message]);
   }
 };
 
 export const evaluateRent = async (req, res) => {
-    try {
-      const { rentId } = req.params;
-      const { status } = req.body;
-      const { id } = req.user; 
-  
-      const rent = await Rent.findById(rentId);
-      if (!rent) {
-        return res.status(404).json({ message: 'Rent not found' });
-      }
-  
-      if (rent.renter.toString() !== id) {
-        return res.status(403).json({ message: 'You are not authorized to evaluate this rental' });
-      }
-  
-      const updatedRent = await Rent.findByIdAndUpdate(
-        rentId,
-        { status: status },
-        { new: true }
-      );
-  
-      res.status(200).json({ message: 'Rental approved successfully', data: updatedRent });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Failed to approve rental' });
-    }
-  };
-  
-  export const getCurrentUserRents = async (req, res) => {
-    try {
-      const { id } = req.user;
-  
-      const rents = await Rent.find({
-        $or: [
-          { rentee: id },  
-          { renter: id }   
-        ]
-      }).populate('car'); 
-  
-      res.status(200).json({ message: 'User rents retrieved successfully', data: rents });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Failed to retrieve user rents' });
-    }
-  };
-  
-
-export const cancelRent = async (req, res) => {
   try {
-    const {rentId} = req.params
-    const {id} = req.user
+    const { rentId } = req.params;
+    const { status } = req.body;
+    const { id } = req.user;
 
-    const rent = await Rent.findById(rentId)
+    const rent = await Rent.findById(rentId);
+    if (!rent) return res.error('Rent not found', 404);
 
-    if(rent.rentee.toString() === id){
-      await rent.deleteOne()
-      return res.status(200).json({ message: 'Rent cancelled successfully' });
-
+    if (rent.renter.toString() !== id) {
+      return res.error('You are not authorized to evaluate this rental', 403);
     }
-    return res.status(401).json({ message: 'Unauthorized.' });
 
+    rent.status = status;
+    await rent.save();
+
+    res.success('Rental evaluated successfully', 200, rent);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Failed to retrieve rent requests' });
+    res.error('Failed to evaluate rental', 500, [error.message]);
   }
 };
 
+export const getCurrentUserRents = async (req, res) => {
+  try {
+    const { id } = req.user;
+
+    const rents = await Rent.find({
+      $or: [{ rentee: id }, { renter: id }],
+    }).populate('car');
+
+    res.success('User rents retrieved successfully', 200, rents);
+  } catch (error) {
+    res.error('Failed to retrieve user rents', 500, [error.message]);
+  }
+};
+
+export const cancelRent = async (req, res) => {
+  try {
+    const { rentId } = req.params;
+    const { id } = req.user;
+
+    const rent = await Rent.findById(rentId);
+    if (!rent) return res.error('Rent not found', 404);
+
+    if (rent.rentee.toString() === id) {
+      await rent.deleteOne();
+      return res.success('Rent cancelled successfully', 200);
+    }
+
+    res.error('Unauthorized', 403);
+  } catch (error) {
+    res.error('Failed to cancel rent', 500, [error.message]);
+  }
+};

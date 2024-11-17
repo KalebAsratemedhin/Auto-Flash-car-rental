@@ -11,17 +11,15 @@ export const addRating = async (req, res) => {
     if(existing){
       existing.score = score
       await existing.save()
-      return res.status(200).json({message: 'updated rating successfully', data: existing.toObject()});
+      return res.success('Rating updated successfully', 200, existing.toObject());
     }
 
-    console.log('new rating carId, score, userId', carId, score, userId)
     const rating = await Rating.create({ userId, carId, score });
 
-    console.log('rating', rating)
-    res.status(201).json({message: 'created successfully', data: rating.toObject()});
+    res.success('Rating created successfully', 201, rating.toObject());
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ message: "Error adding rating", error });
+    res.error('Internal server error.', 500, [error.message]);
+    
   }
 };
 
@@ -38,10 +36,10 @@ export const getRatingsByCar = async (req, res) => {
         totalScore += rating.score
     }
     
-    res.status(200).json({ message: 'Ratings fetched successfully', data: {averageScore: totalScore / reviews, reviews} });
+    res.success('Ratings fetched successfully', 200, {averageScore: totalScore / reviews, reviews} );
 
   } catch (error) {
-    res.status(500).json({ message: "Error fetching ratings", error });
+    res.error('Internal server error.', 500, [error.message]);
   }
 };
 
@@ -51,13 +49,10 @@ export const getOneRating = async (req, res) => {
       const { carId } = req.params;
       const rating = await Rating.findOne({ carId, userId });
 
-      console.log('rating', rating)
-      
-      res.status(200).json({ message: 'Rating fetched successfully', data: rating });
+      return res.success('Rating fetched successfully', 200, rating);
 
     } catch (error) {
-      console.error(error)
-      res.status(500).json({ message: "Error fetching ratings", error });
+      res.error('Internal server error.', 500, [error.message]);
     }
   };
 
@@ -65,18 +60,23 @@ export const deleteRating = async (req, res) => {
   try {
     const { ratingId } = req.params;
     await Rating.findByIdAndDelete(ratingId);
-    res.status(200).json({ message: "Rating deleted" });
+    return res.success('Rating deleted successfully', 202, rating);
+
+
   } catch (error) {
-    res.status(500).json({ message: "Error deleting rating", error });
+    res.error('Internal server error.', 500, [error.message]);
   }
 };
 
-export const updateRating = async (req, res) => {
-    try {
-      const { ratingId } = req.params;
-      await Rating.findByIdAndUpdate(ratingId, req.body);
-      res.status(200).json({ message: "Rating updated" });
-    } catch (error) {
-      res.status(500).json({ message: "Error deleting rating", error });
-    }
-  };
+
+export const getFavoriteCars = async (req, res) => {
+  try {
+    const {id} = req.user;
+    const favs = await Rating.find({userId: id})
+    
+    res.success('Favorites fetched successfully', 200, {favs} );
+
+  } catch (error) {
+    res.error('Internal server error.', 500, [error.message]);
+  }
+};

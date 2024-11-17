@@ -1,77 +1,79 @@
 import Comment from "../models/comment.js";
 
+// Add a comment to a car
 export const addComment = async (req, res) => {
   try {
-    console.log('comment', req.body)
     const { carId, content } = req.body;
     const userId = req.user.id;
 
-    const existing = await Comment.findOne({userId, carId})
-
-    if(existing){
-      return res.status(400).json({message: 'You already have a comment. You can edit it.'})
+    const existing = await Comment.findOne({ userId, carId });
+    if (existing) {
+      return res.error('You already have a comment. You can edit it.', 400);
     }
 
     const comment = await Comment.create({ userId, carId, content });
-    res.status(201).json({message: 'Comment created.', data: comment});
+    res.success('Comment created.', 201, comment);
   } catch (error) {
-    res.status(500).json({ message: "Error adding comment", error });
+    res.error('Error adding comment', 500, [error.message]);
   }
 };
 
+// Get all comments for a car
 export const getCommentsByCar = async (req, res) => {
   try {
     const { carId } = req.params;
-    const comments = await Comment.find({ carId }).populate("userId");
-    res.status(200).json({ message: 'Comments fetched successfully', data: comments });
 
+    const comments = await Comment.find({ carId }).populate('userId');
+    res.success('Comments fetched successfully', 200, comments);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching comments", error });
-  }
-}; 
-
-export const getOneComment = async (req, res) => {
-    try {
-      const { carId } = req.params;
-      console.log('req.user', req.user)
-      const userId = req.user.id
-      const comment = await Comment.findOne({ carId, userId });
-      
-      res.status(200).json({ message: 'Comment fetched successfully', data: comment });
-
-    } catch (error) {
-      console.error(error)
-      res.status(500).json({ message: "Error fetching ratings", error });
-    }
-  };
-
-
-
-export const deleteComment = async (req, res) => {
-  try {
-    const { commentId } = req.params;
-    await Comment.findByIdAndDelete(commentId);
-    res.json({ message: "Comment deleted" });
-  } catch (error) {
-    res.status(500).json({ message: "Error deleting comment", error });
+    res.error('Error fetching comments', 500, [error.message]);
   }
 };
 
+// Get a single comment by the logged-in user for a car
+export const getOneComment = async (req, res) => {
+  try {
+    const { carId } = req.params;
+    const userId = req.user.id;
 
+    const comment = await Comment.findOne({ carId, userId });
+    if (!comment) return res.error('Comment not found.', 404);
+
+    res.success('Comment fetched successfully', 200, comment);
+  } catch (error) {
+    res.error('Error fetching comment', 500, [error.message]);
+  }
+};
+
+// Delete a comment
+export const deleteComment = async (req, res) => {
+  try {
+    const { commentId } = req.params;
+
+    const comment = await Comment.findById(commentId);
+    if (!comment) return res.error('Comment not found.', 404);
+
+    await comment.deleteOne();
+    res.success('Comment deleted successfully', 200);
+  } catch (error) {
+    res.error('Error deleting comment', 500, [error.message]);
+  }
+};
+
+// Update a comment
 export const updateComment = async (req, res) => {
-    try {
-      console.log('comment update', req.body, req.params)
-      const { commentId } = req.params;
+  try {
+    const { commentId } = req.params;
+    const { content } = req.body;
 
-      await Comment.findByIdAndUpdate(commentId, {content: req.body.content});
-      res.status(200).json({ message: "Comment updated" });
-    } catch (error) {
-      console.error(error)
-      res.status(500).json({ message: "Error deleting comment", error });
-    }
-  };
+    const comment = await Comment.findById(commentId);
+    if (!comment) return res.error('Comment not found.', 404);
 
+    comment.content = content;
+    await comment.save();
 
-
-
-
+    res.success('Comment updated successfully', 200, comment);
+  } catch (error) {
+    res.error('Error updating comment', 500, [error.message]);
+  }
+};

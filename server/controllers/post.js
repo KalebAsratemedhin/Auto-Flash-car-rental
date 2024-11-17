@@ -7,7 +7,7 @@ export const postCar = async (req, res) => {
     const {id} = req.user
  
     if (!photoPath) {
-      return res.status(400).json({ message: 'Photo is required' });
+      return res.error('Photo is required', 404);
     }
 
     const newCar = await Car.create({
@@ -22,9 +22,9 @@ export const postCar = async (req, res) => {
       photo: photoPath
     });
 
-    res.status(201).json({ message: 'Car posted successfully', data: newCar });
+    res.success('Car posted successfully', 201, newCar );
   } catch (error) {
-    res.status(500).json({ message: 'Error posting car', error: error.message });
+    res.error('Internal server error.', 500, [error.message]);
   }
 };
 
@@ -47,16 +47,16 @@ export const getAllCars = async (req, res) => {
       
       const totalCars = await Car.countDocuments()
   
-      res.status(201).json({ 
-        message: 'Cars fetched successfully', 
-        data: cars, 
-        totalPages: Math.ceil(totalCars/ limit), 
-        currentPage: page 
-      });
+      res.success( 'Cars fetched successfully', 200, 
+        {
+          cars, 
+          totalPages: Math.ceil(totalCars/ limit), 
+          currentPage: page
+        } 
+      );
 
     } catch (error) {
-      console.error(error)
-      res.status(500).json({ message: 'Error fetching cars', error: error.message });
+      res.error('Internal server error.', 500, [error.message]);
     }
 };
 
@@ -65,10 +65,10 @@ export const getOneCar = async (req, res) => {
     const {carId} = req.params
     const car = await Car.findById(carId);
 
+    res.success('Car fetched successfully', 200, car);
 
-    res.status(201).json({ message: 'Cars fetched successfully', data: car });
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching cars', error: error.message });
+    res.error('Internal server error.', 500, [error.message]);
   }
 };
 
@@ -79,9 +79,9 @@ export const getAdminCars = async (req, res) => {
     const {userId} = req.params
     const cars = await Car.find({owner: userId});
 
-    res.status(201).json({ message: 'Cars fetched successfully', data: cars });
+    res.success('Cars fetched successfully', 200, cars);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching cars', error: error.message });
+    res.error('Internal server error.', 500, [error.message]);
   }
 };
 

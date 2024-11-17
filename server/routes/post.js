@@ -11,5 +11,4 @@ router.get('/admins/:userId', authenticateUser, isAdmin, getAdminCars);
 router.get('/', getAllCars);
 
 
-
 export default router;
