@@ -38,8 +38,9 @@ const userSchema = mongoose.Schema(
         googleId: {  
             type: String
         },
-        emailVerified: { type: Boolean, default: false },
-        emailVerificationToken: { type: String },
+        isVerified: { type: Boolean, default: false },
+        verificationToken: { type: String },
+        verificationTokenExpires: { type: Date }, 
         resetPasswordToken: { type: String },
         resetPasswordExpires: { type: Date },
     },
