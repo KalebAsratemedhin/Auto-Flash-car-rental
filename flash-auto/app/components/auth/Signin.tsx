@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form"
 import Link from "next/link";
 
 import { FcGoogle } from "react-icons/fc";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, SignInResponse, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { redirect, useRouter } from "next/navigation";
 import CustomLoading from "../utils/CustomLoading";
@@ -17,7 +17,7 @@ const Signin = () => {
     const {formState: {errors}, register, handleSubmit} = useForm<FormData>({
         mode: 'onChange'
     });
-    const [signinError, setSigninError] = useState('');
+    const [signinRes, setSigninRes] = useState<SignInResponse>();
 
     const router = useRouter()
 
@@ -27,14 +27,13 @@ const Signin = () => {
             email: data.email,
             password: data.password,
         });
-    
-        if (result?.error) {
-            console.error('err',result.error);
-            setSigninError(result.error)
-        }
+
+
+        setSigninRes(result)
+       
 
         if(session.data){
-            console.log(session.data, 'data')
+            console.log(session.data, session.data.user.id, session.status, 'data')
         }
     }
 
@@ -43,9 +42,7 @@ const Signin = () => {
     useEffect(() => {
         if(session.status === "authenticated" && session.data.user.id){
             router.push(`/dashboard/${session.data.user.id}`)
-        }
-
-        
+        }      
 
     }, [session.status, router])
 
@@ -65,7 +62,8 @@ const Signin = () => {
             </div>  
 
             {session.status === 'loading' && <CustomLoading />}
-            {signinError && <CustomError error={signinError} /> }
+            {signinRes && signinRes.error && <CustomError error={signinRes.error} /> }
+
             <form noValidate onSubmit={handleSubmit(onSubmit)} >
                 <div className="my-3">
                     <label className="text-gray-500 text-base" htmlFor="email">Email</label>

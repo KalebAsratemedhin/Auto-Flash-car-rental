@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { User, UserSummary } from "../../types/User";
 import { RootState } from "../store";
+import { ApiResponse } from "@/types/ApiResponse";
 
 export const userAPI = createApi({
     reducerPath: 'userApi',
@@ -29,7 +30,7 @@ export const userAPI = createApi({
                 method: 'GET'
             })
         }),
-        getUserSummary: builder.query<{data: UserSummary}, string>({
+        getUserSummary: builder.query<ApiResponse<UserSummary>, string>({
             query: (userId) => ({
                 url: `/summary/${userId}`,
                 method: 'GET'

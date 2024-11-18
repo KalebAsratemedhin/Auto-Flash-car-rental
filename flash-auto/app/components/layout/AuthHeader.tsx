@@ -8,6 +8,7 @@ import { signOut } from "next-auth/react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setFullName } from "@/redux/slices/authSlice";
+import {IoIosNotifications} from "react-icons/io";
 
 
 const AuthHeader = () => {
@@ -33,10 +34,9 @@ const AuthHeader = () => {
       <div >        
           {
             data &&
-            <div className='flex gap-4'>
-              <button onClick={() => signOut()} className="px-4 py-2 rounded-full  bg-white border dark:bg-none border-red-400 text-red-400 hover:bg-red-400 hover:text-white">
-                Signout
-              </button>
+            <div className='flex items-center gap-4'>
+              
+              <IoIosNotifications className="w-8 h-8" />
               <Link className="w-12 h-12 bg-gray-300 rounded-full flex justify-center items-center" href={`/dashboard/${data.data._id}`}>{data.data.fullName?.slice(0, 2).toUpperCase()}</Link>
             </div>
           }

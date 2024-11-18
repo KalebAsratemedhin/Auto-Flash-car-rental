@@ -1,6 +1,6 @@
 import React from 'react'
-import CustomLoading from './CustomLoading'
-import CustomError from './CustomError'
+import CustomLoading from '../utils/CustomLoading'
+import CustomError from '../utils/CustomError'
 import { useGetUserSummaryQuery } from '@/redux/api/userAPI'
 const UserStats = ({id}: {id: string}) => {
   const {isLoading, isError, isSuccess, data, error} = useGetUserSummaryQuery(id)
@@ -9,30 +9,29 @@ const UserStats = ({id}: {id: string}) => {
   if(isLoading)
     return <CustomLoading />
 
-  if(isError)
+  if(isError){
+    console.log('stats error', error, data)
     return <CustomError error={error} />
+  }
 
-  if(isSuccess)
+  if(isSuccess){
+    
     return (
         
-        <div className='flex gap-4'>
-            <div className='p-12 rounded-md bg-white shadow-md flex flex-col justify-center items-center text-red-500 font-bold text-3xl'>
-                <p>Posted Cars</p>
-                <p>{data.data.posts}</p>
-
-            </div>
+        <div className='flex gap-4 flex-wrap'>
+            
             <div className='p-12 rounded-md bg-white shadow-md flex flex-col justify-center items-center text-red-500 font-bold text-3xl'>
                 <p>Rented Cars</p>
-                <p>{data.data.rented}</p>
+                <p>{data.data?.rentCount}</p>
 
             </div>
             <div className='p-12 rounded-md bg-white shadow-md flex flex-col justify-center items-center text-red-500 font-bold text-3xl'>
-                <p>Income</p>
-                <p>{data.data.income}ETB</p>
+                <p>Spent</p>
+                <p>{data.data?.totalCost} ETB</p>
 
             </div>
         </div>
-    )
+    )}
 }
 
 export default UserStats

@@ -1,11 +1,12 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import ThemeToggler from "../utils/ThemeToggler"
+import { signOut } from "next-auth/react"
 
 const Sidebar = () => {
     const path = usePathname()
 
-    const paths = ['dashboard', 'settings', 'rents', 'users']
+    const paths = ['dashboard', 'settings', 'rents', 'users', 'discover', 'rent']
   return (
     <div className="w-64 h-screen bg-gray-800 text-white  p-5 ">
         
@@ -27,17 +28,12 @@ const Sidebar = () => {
                 })
             }
         
-        {/* <li className="mb-4 border-l-red-400 border-l pl-4">
-            <Link href={`/settings`} className="hover:text-gray-400">Settings</Link>
-        </li>
-        <li className="mb-4 border-l-red-400 border-l pl-4">
-            <Link href={`/rents`} className="hover:text-gray-400">Rents</Link>
-        </li>
-        <li className="mb-4 border-l-red-400 border-l pl-4">
-            <Link href={`/users`} className="hover:text-gray-400">Users</Link>
-        </li> */}
+        
         <ThemeToggler />
         </ul>
+        <button onClick={() => signOut()} className="px-4 py-2 rounded-full  bg-white border dark:bg-none border-red-400 text-red-400 hover:bg-red-400 hover:text-white">
+            Signout
+        </button>
     </div>
   )
 }

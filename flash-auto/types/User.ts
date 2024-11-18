@@ -18,9 +18,13 @@ export interface User {
    
 
 export interface UserSummary {
-    rented: number;
-    posts: number;
-    income: number;
+    rentCount: number;
+    totalCost: number;
+}
+
+export interface AdminSummary {
+    postCount: number;
+    totalCost: number;
 }
 
 

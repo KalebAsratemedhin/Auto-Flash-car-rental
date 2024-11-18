@@ -17,17 +17,17 @@ const RentalsList = () => {
   
     if(isSuccess ){
   return (
-    <div>        
+    <div className=''>        
         <div>
             <h1 className='text-3xl font-bold  my-4'>Renter History</h1>
             <RentalsTable rents={data?.data.filter((rent) => rent.renter == auth.data?.user.id )} />
         </div>
 
-        <div>
+        {/* <div>
             <h1 className='text-3xl font-bold  my-4'>Rentee History</h1>
             <RentalsTable rents={data?.data.filter((rent) => rent.rentee == auth.data?.user.id )} />
 
-        </div>
+        </div> */}
         
     </div>
   )

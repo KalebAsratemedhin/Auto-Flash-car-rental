@@ -33,10 +33,9 @@ export const authOptions: NextAuthOptions = {
 
           const data = await result.json()
 
-      
 
           if (result.ok && data) {
-            return data;
+            return data.data;
           } else {
             return null;
           }

@@ -19,7 +19,7 @@ const Header = () => {
         </div>
       </div>
 
-      <nav className='flex justify-between gap-12'>
+      <nav className='hidden md:flex justify-between gap-12'>
         <Link className='hover:text-red-400 hover:underline hover:underline-offset-8' href='/post'>post</Link>
         <Link className='hover:text-red-400 hover:underline hover:underline-offset-8' href='/discover'>discover</Link>
      
