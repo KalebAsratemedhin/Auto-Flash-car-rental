@@ -45,7 +45,7 @@ const Landing = () => {
         <p className="text-lg mb-6">Rent a car, whenever and wherever you need it.</p>
         <Link href="/auth/signup" className="px-6 py-3 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300">Get Started</Link>
       </header>
-
+      Ver
       <section className="flex flex-col items-center py-20 px-8 bg-white">
         <h2 className="text-4xl font-semibold text-red-600 mb-6 underline">About Us</h2>
         <p className="text-lg max-w-3xl text-center text-gray-700">
@@ -60,8 +60,8 @@ const Landing = () => {
             {services.map((service, index) => (
               <div
                 key={index}
-                className={`swoop-item flex items-center space-x-6 ml-24 transform translate-x-16 opacity-0 transition-opacity duration-300 ease-out`}
-                style={{ animationDelay: `${index * 100}ms` }}
+                className={`swoop-item flex items-center space-x-10 ml-2 px-8 transform translate-y-10 opacity-0 transition-opacity duration-300 ease-out`}
+                style={{ animationDelay: `${index * 1}ms` }}
               >
                 <div className="relative flex justify-center items-center w-20 h-20">
                   <div className="absolute w-20 h-20 border-4 border-red-600 rounded-full transform rotate-[15deg] border-t-transparent"></div>
@@ -78,7 +78,7 @@ const Landing = () => {
 
 
 
-      <section className="flex flex-col items-center py-20 px-8 bg-white">
+      <section className="flex flex-col items-center py-20 md:px-8 bg-white">
         <h2 className="text-4xl font-semibold text-red-600 mb-6 underline">Popular Cars</h2>
         <ImageSlider />
         <p className="text-lg mt-6 text-gray-700 max-w-2xl text-center">

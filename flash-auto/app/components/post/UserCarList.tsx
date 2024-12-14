@@ -1,10 +1,10 @@
-import { useGetUserPostsQuery } from "@/redux/api/postAPI"
+import { useGetPostsByUserIdQuery } from "@/redux/api/userAPI"
 import CustomError from "../utils/CustomError"
 import CustomLoading from "../utils/CustomLoading"
 import CarList from "./CarList"
 
 const UserCarList = ({id}: {id: string}) => {
-  const {isLoading, isError, isSuccess, data, error} = useGetUserPostsQuery(id)
+  const {isLoading, isError, isSuccess, data, error} = useGetPostsByUserIdQuery(id)
 
   if(isLoading)
     return <CustomLoading />
@@ -17,7 +17,7 @@ const UserCarList = ({id}: {id: string}) => {
         <div>
             <h1 className='text-3xl font-bold'>Your cars</h1>
 
-            <CarList cars={data.data} />
+            <CarList cars={data.data!} />
         </div>
     )
 }

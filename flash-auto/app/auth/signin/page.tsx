@@ -1,14 +1,19 @@
 import Signin from '@/app/components/auth/Signin'
 
-const page = () => {
-  return (
-    <div className="">
-        <div className="min-h-screen  flex justify-center items-center bg-[url('/tucson.jpeg')] object-cover">
-            <Signin />
-        </div>
-        
-    </div>
-  )
-}
 
-export default page
+const Page = () => {
+  return (
+    <div className="min-h-screen">
+      <div
+        className="min-h-screen flex justify-center items-center bg-no-repeat bg-cover bg-center py-10"
+        style={{
+          backgroundImage: "url('/tucson.jpeg')",
+        }}
+      >
+        <Signin />
+      </div>
+    </div>
+  );
+};
+
+export default Page

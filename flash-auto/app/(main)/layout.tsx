@@ -1,5 +1,5 @@
 'use client'
-import Header from "../components/layout/Header";
+import Header from "../components/layout/Header/Header";
 import Footer from "../components/layout/Footer";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
@@ -13,24 +13,24 @@ const layout = ({
     children: React.ReactNode;
   }>) => {
 
-  const session = useSession()
-  const dispatch = useDispatch()
-  const token = useSelector(authSelector)
+  // const session = useSession()
+  // const dispatch = useDispatch()
+  // const token = useSelector(authSelector)
 
-  useEffect(() => {
-
-
-    if(session.status === "authenticated"){
-      console.log(session.data.user,'token')
-      dispatch(setSession(session.data.user.accessToken))
-    }
-
-  }, [session.status, dispatch, setSession, session.data])
+  // useEffect(() => {
 
 
-  if (token.accessToken || session.status === "unauthenticated"){
+  //   if(session.status === "authenticated"){
+  //     console.log(session.data.user,'token')
+  //     dispatch(setSession(session.data.user.accessToken))
+  //   }
+
+  // }, [session.status, dispatch, setSession, session.data])
+
+
+  // if (token.accessToken || session.status === "unauthenticated"){
     return (
-      <div className="">
+      <div className="w-full">
               
           <Header />
   
@@ -41,7 +41,7 @@ const layout = ({
           <Footer />
       </div>
     )
-  }
+  // }
 
 
 }

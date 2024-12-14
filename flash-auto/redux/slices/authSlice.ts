@@ -1,27 +1,56 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../store";
+import { createSlice } from '@reduxjs/toolkit';
 
-
+const initialState = {
+  user: null,
+  token: localStorage.getItem('token'),
+  isAuthenticated: false,
+  isLoading: true,
+};
 
 const authSlice = createSlice({
-    name: 'auth',
-    initialState: {accessToken: '', fullName: ''},
-    reducers: {
-        setSession: (state, action) => {
-            state.accessToken = action.payload
-        },
+  name: 'auth',
+  initialState,
+  reducers: {
+    setCredentials: (state, { payload: { user, token } }) => {
+      state.user = user;
+      state.token = token;
+      state.isAuthenticated = true;
+      state.isLoading = false;
+      localStorage.setItem('token', token);
+    },
+    logout: (state) => {
+      state.user = null;
+      state.token = null;
+      state.isAuthenticated = false;
+      state.isLoading = false;
+      localStorage.removeItem('token');
+    },
+    setUser: (state, { payload }) => {
+      state.user = payload;
+      state.isAuthenticated = true;
+      state.isLoading = false;
+    },
+    startLoading: (state) => {
+      state.isLoading = true;
+    },
+    stopLoading: (state) => {
+      state.isLoading = false;
+    },
+  },
+});
 
-        removeSession: (state) => {
-            state.accessToken = ''  
-        },
-        setFullName: (state, action) => {
-            state.fullName = action.payload
-        }
+export const {
+  setCredentials,
+  logout,
+  setUser,
+  startLoading,
+  stopLoading,
+} = authSlice.actions;
 
-    }
+export default authSlice.reducer;
 
-})
-
-export const {setSession, removeSession, setFullName} = authSlice.actions
-export const authSelector = (state: RootState) => state.auth
-export default authSlice.reducer
+// Selectors
+export const selectCurrentUser = (state) => state.auth.user;
+export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
+export const selectAuthToken = (state) => state.auth.token;
+export const selectAuthLoading = (state) => state.auth.isLoading;

@@ -24,7 +24,7 @@ const CustomError = ({ error, duration=1000000}: { error: FetchBaseQueryError | 
     <div className="flex items-center justify-center h-20 rounded-md bg-red-100 fixed left-3 bottom-5 p-4">
       <div className="text-center">
         <h2 className="text-3xl font-semibold text-red-600">Error</h2>
-        <p className="mt-2 text-red-500">{ apiError?.message ||apiError?.errors[0] || 'Something went wrong!'}</p>
+        <p className="mt-2 text-red-500">{ apiError?.errors && apiError.errors[0] || apiError?.message || 'Something went wrong!'}</p>
       </div>
     </div>
   );

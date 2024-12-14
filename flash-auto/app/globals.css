@@ -1,26 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-} */
-
-/* Add these styles to your global CSS or the component CSS */
 .service-item {
   opacity: 0;
   transform: translateX(-100px);
@@ -32,23 +13,19 @@ body {
   transform: translateX(0);
 }
 
-/* 
-@keyframes swoopIn {
+
+@keyframes swoopVerticalIn {
   0% {
-    transform: translateX(50%);
+    transform: translateY(70%);
     opacity: 0;
   }
   100% {
-    transform: translateX(0);
+    transform: translateY(0);
     opacity: 1;
   }
 }
 
-.animate-swoopIn {
-  animation: swoopIn 2s ease-out forwards;
-} */
-
-@keyframes swoopIn {
+@keyframes swoopHorizontalIn {
   0% {
     transform: translateX(70%);
     opacity: 0;
@@ -60,7 +37,15 @@ body {
 }
 
 .animate-swoopIn {
-  animation: swoopIn 1s ease-out forwards;
+  animation: swoopVerticalIn 1s ease-out forwards;
+}
+
+@media all and (min-width: 900px){
+  .animate-swoopIn {
+    animation: swoopHorizontalIn 1s ease-out forwards;
+    
+  }
+
 }
 
 

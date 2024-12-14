@@ -64,13 +64,13 @@ export const authOptions: NextAuthOptions = {
             return false
           }
 
-          // Check if the backend response contains user data
+          
           if (data) {
             console.log('data', data)
 
-            user.id = data.id,
-            user.accessToken = data.accessToken,
-            user.role = data.role
+            user.id = data.data.id,
+            user.accessToken = data.data.accessToken,
+            user.role = data.data.role
             return true;
           } else {
             return false; 
@@ -84,14 +84,22 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       console.log('token', token)
+      const currentTime = Math.floor(Date.now() / 1000);
+      console.log('session time comp', session, 'session date', new Date(session.expires).toLocaleTimeString(), currentTime, token.exp)
+
+      if (token?.exp && currentTime > (token.exp as number)) {
+        return session; 
+      }
 
       
       session.user = token.user as User;
       return session;
     },
-    async jwt({ token, user }) {
-      console.log('jwt user', user)
-
+    async jwt({ token, user, account}) {
+      console.log('jwt user', user ,'token with exp', account)
+      // if (Date.now() > account?.expires_at * 1000) {
+      //   return null; // Invalidate the token
+      // }
       if (user) {
         token.user = user;
       }

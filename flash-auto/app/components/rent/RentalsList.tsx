@@ -1,7 +1,7 @@
 import CustomLoading from '../utils/CustomLoading'
-import { useGetCurrentUserRentsQuery } from '@/redux/api/rentAPI'
+import { useGetCurrentUserRentsQuery } from '@/redux/api/userAPI'
 import CustomError from '../utils/CustomError'
-import RentalsTable from './RentalsTable'
+import RentalsTable from '../admin/RentalsTable'
 import { useSession } from 'next-auth/react'
 
 const RentalsList = () => {
@@ -16,19 +16,25 @@ const RentalsList = () => {
       return <CustomError error={error} />
   
     if(isSuccess ){
+      const rents = data.data
+      const currUser = auth.data?.user!
+      const filtered = currUser.role === "admin" ? (
+        rents.filter(rent => {
+          rent.renter === currUser.id
+        })
+      ) : (
+        rents.filter(rent => {
+          rent.rentee === currUser.id
+        })
+
+      )
   return (
     <div className=''>        
         <div>
-            <h1 className='text-3xl font-bold  my-4'>Renter History</h1>
-            <RentalsTable rents={data?.data.filter((rent) => rent.renter == auth.data?.user.id )} />
+            <h1 className='text-3xl font-bold  my-4'>Rent History</h1>
+            <RentalsTable rents={filtered} />
         </div>
-
-        {/* <div>
-            <h1 className='text-3xl font-bold  my-4'>Rentee History</h1>
-            <RentalsTable rents={data?.data.filter((rent) => rent.rentee == auth.data?.user.id )} />
-
-        </div> */}
-        
+       
     </div>
   )
 }}

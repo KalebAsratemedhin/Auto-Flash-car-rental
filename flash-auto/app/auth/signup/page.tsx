@@ -2,10 +2,15 @@ import Signup from '@/app/components/auth/Signup'
 
 const page = () => {
   return (
-    <div className="">
-        <div className="min-h-screen w-full flex justify-center items-center bg-[url('/tucson.jpeg')] bg-cover md:p-12">
-            <Signup />
-        </div>
+    <div className="min-h-screen">
+      <div
+        className="min-h-screen flex justify-center items-center bg-no-repeat bg-cover bg-center py-10"
+        style={{
+          backgroundImage: "url('/tucson.jpeg')",
+        }}
+      >
+        <Signup />
+      </div>
         
     </div>
   )
