@@ -1,11 +1,6 @@
 'use client'
 import Header from "../components/layout/Header/Header";
 import Footer from "../components/layout/Footer";
-import { useEffect } from "react";
-import { useSession } from "next-auth/react";
-import { useDispatch, useSelector } from "react-redux";
-import { authSelector, setSession } from "@/redux/slices/authSlice";
-
 
 const layout = ({
     children,

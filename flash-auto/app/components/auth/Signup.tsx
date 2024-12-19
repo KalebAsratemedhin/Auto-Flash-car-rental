@@ -14,26 +14,31 @@ import { RiLockPasswordLine } from 'react-icons/ri';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 
+import {useRegisterMutation} from '@/redux/api/authApi';
+import TextField from '../utils/TextField';
+
 interface SignUpFormData {
   firstName: string;
   lastName: string;
   email: string;
-  phone: string;
+  phoneNumber: string;
   password: string;
   confirmPassword: string;
-  agreeToTerms: boolean;
 }
 
 const SignUp: React.FC = () => {
   const { register, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm<SignUpFormData>();
   const [error, setError] = useState<string>('');
+  const [signup, {isLoading, isSuccess, isError, error: signupError, data}] = useRegisterMutation();
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   const onSubmit: SubmitHandler<SignUpFormData> = async (data) => {
     try {
-      // Submit logic here
-      console.log(data);
+      console.log('signup', data)
+      // register()
+      await signup(data)
     } catch (err) {
-      setError('Something went wrong. Please try again.');
+      setError(error);
     }
   };
 
@@ -79,92 +84,106 @@ const SignUp: React.FC = () => {
 
             <form className="mt-6 space-y-6" onSubmit={handleSubmit(onSubmit)}>
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                <InputField
-                  id="firstName"
-                  label="firstName"
-                  type="text"
-                  placeholder="First name"
-                  icon={HiOutlineUser}
-                  error={errors.firstName?.message}
-                  {...register('firstName', { required: 'First name is required' })}
-                />
-                <InputField
-                  id="lastName"
-                  label="lastName"
-                  type="text"
-                  placeholder="Last name"
-                  icon={HiOutlineUser}
-                  error={errors.lastName?.message}
-                  {...register('lastName', { required: 'Last name is required' })}
-                />
+
+              <TextField
+                label="FirstName"
+                id="firstName"
+                type="text"
+                placeholder="First name"
+                icon={HiOutlineUser}
+                register={register}
+                validation={{ required: "First name is required" }}
+                error={errors.firstName?.message}
+              />
+
+              <TextField
+                label="Last Name"
+                id="lastName"
+                type="text"
+                placeholder="Last name"
+                icon={HiOutlineUser}
+                register={register}
+                validation={{ required: "Last name is required" }}
+                error={errors.lastName?.message}
+              />      
+
               </div>
 
-              <InputField
+              <TextField
+                label="Email"
                 id="email"
-                label="email"
                 type="email"
+                register={register}
+                validation={{
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                    message: "Enter a valid email"
+                  }
+                }}
+                error={errors.email?.message}
                 placeholder="Enter your email"
                 icon={HiOutlineMail}
-                error={errors.email?.message}
-                {...register('email', {
-                  required: 'Email is required',
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: 'Enter a valid email address',
-                  },
-                })}
+                
               />
 
-              <InputField
-                id="phone"
-                label="Phone"
+              <TextField
+                label="Phone Number"
+                id="phoneNumber"
                 type="text"
+                register={register}
+                validation={{ 
+                  required: "Phone Number is required",
+                  validate: (value: string) => {
+                    return (value as string).length >= 10 || 'Phone number must be at least 10 digits';
+                  }  
+                 }}
+                error={errors.phoneNumber?.message}
+                
                 placeholder="Enter your phone"
                 icon={HiOutlineMail}
-                error={errors.email?.message}
-                {...register('phone', {
-                  required: 'Phone number is required',
-                  validate: (value) => {
-                    return (value as string).length >= 10 || 'Phone number must be at least 10 digits';
-                  }
-                })}
+
               />
 
-              <InputField
+              <TextField
+                label="Password"
                 id="password"
-                label="password"
                 type="password"
+                register={register}
+                validation={{
+                  required: "Password is required",
+                  validate: (value: string) => {
+                    if (value.length < 6) return "Password should not be shorter than six characters.";
+                    return /[a-zA-Z]{1,}/.test(value) || 'Password must contain at least one letter';
+                  }
+                }}
                 placeholder="Create a password"
                 icon={RiLockPasswordLine}
                 error={errors.password?.message}
-                {...register('password', {
-                  required: 'Password is required',
-                  minLength: {
-                    value: 6,
-                    message: 'Password must be at least 6 characters long',
-                  },
-                })}
               />
-              <InputField
+
+
+          
+              <TextField
                 id="confirmPassword"
-                label="confirmPassword"
+                label="Confirm Password"
                 type="password"
                 placeholder="Confirm your password"
                 icon={RiLockPasswordLine}
                 error={errors.confirmPassword?.message}
-                {...register('confirmPassword', {
+                register={register}
+                validation={{
                   required: 'Confirm password is required',
-                  validate: (value) => value === watch('password') || 'Passwords do not match',
-                })}
+                  validate: (value: string) => {value === watch('password') || 'Passwords do not match'}
+                }}
               />
 
               <Checkbox
                 id="agreeToTerms"
-                label="I agree to the"
+                label="I agree to the terms and conditions"
                 link="/terms"
-                checked={false}
-                error={errors.agreeToTerms?.message}
-                {...register('agreeToTerms', { required: 'You must agree to the terms' })}
+                checked={agreedToTerms}
+                onChange={() => setAgreedToTerms(!agreedToTerms)}
               />
 
               <Button

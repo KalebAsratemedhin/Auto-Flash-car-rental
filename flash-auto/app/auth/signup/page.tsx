@@ -6,7 +6,7 @@ const page = () => {
       <div
         className="min-h-screen flex justify-center items-center bg-no-repeat bg-cover bg-center py-10"
         style={{
-          backgroundImage: "url('/tucson.jpeg')",
+          backgroundImage: "url('/gold-supercar-with-word-supercar-front.jpg')",
         }}
       >
         <Signup />

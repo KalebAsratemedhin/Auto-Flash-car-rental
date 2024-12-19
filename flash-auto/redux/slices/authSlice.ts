@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import {RootState} from '@/redux/store';
 
 const initialState = {
   user: null,
@@ -49,8 +50,7 @@ export const {
 
 export default authSlice.reducer;
 
-// Selectors
-export const selectCurrentUser = (state) => state.auth.user;
-export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
-export const selectAuthToken = (state) => state.auth.token;
-export const selectAuthLoading = (state) => state.auth.isLoading;
+export const selectCurrentUser = (state: RootState) => state.auth.user;
+export const selectIsAuthenticated = (state: RootState) => state.auth.isAuthenticated;
+export const selectAuthToken = (state: RootState) => state.auth.token;
+export const selectAuthLoading = (state: RootState) => state.auth.isLoading;

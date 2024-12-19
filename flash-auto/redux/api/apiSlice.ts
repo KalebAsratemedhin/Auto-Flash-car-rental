@@ -1,17 +1,19 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery, FetchBaseQueryError, FetchArgs } from '@reduxjs/toolkit/query/react';
+
+import { RootState } from '../store';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:5001/api',
+  baseUrl: `http://localhost:5000`,
   prepareHeaders: (headers, { getState }) => {
-    // Get token from auth state
-    const token = getState().auth.token;
-    if (token) {
-      headers.set('authorization', `Bearer ${token}`);
-    }
-    return headers;
-  },
-});
+      const state = getState() as RootState;
+      const accessToken = state.auth?.token;
 
+      if (accessToken) {
+          headers.set('authorization', `Bearer ${accessToken}`);
+      }
+      return headers;
+  }
+});
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery,

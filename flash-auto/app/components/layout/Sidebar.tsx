@@ -12,7 +12,6 @@ const Sidebar = () => {
     { icon: FiCompass, label: 'Discover', href: '/discover' },
     { icon: FiHeart, label: 'Favorites', href: '/favorites' },
     { icon: FiCalendar, label: 'My Rentals', href: '/rentals' },
-    { icon: FiMessageCircle, label: 'Messages', href: '/messages' },
     { icon: FiSettings, label: 'Settings', href: '/settings' },
   ];
 

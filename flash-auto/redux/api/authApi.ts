@@ -11,7 +11,7 @@ export const authApi = apiSlice.injectEndpoints({
     }),
     register: builder.mutation({
       query: (userData) => ({
-        url: '/auth/register',
+        url: '/auth/signup',
         method: 'POST',
         body: userData,
       }),
@@ -56,3 +56,15 @@ export const authApi = apiSlice.injectEndpoints({
     }),
   }),
 });
+
+
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useGoogleLoginMutation,
+  useVerifyEmailMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
+  useChangePasswordMutation,
+  useGetCurrentUserQuery,
+} = authApi;

@@ -39,13 +39,13 @@ const Landing = () => {
 
   return (
     <div className="flex flex-col bg-gray-100">
-      <header className="bg-[url('/car-inside-view.jpeg')] bg-no-repeat bg-cover py-8 flex flex-col items-center justify-center h-screen text-white text-center">
+      <header className="bg-[url('/car-car-park.jpg')] bg-no-repeat bg-cover py-8 flex flex-col items-center justify-center h-screen text-white text-center">
         <h1 className="text-6xl font-bold mb-4">Welcome to AutoFlash Car Rentals</h1>
         <h2 className="text-4xl font-bold mb-2">Take Control</h2>
         <p className="text-lg mb-6">Rent a car, whenever and wherever you need it.</p>
         <Link href="/auth/signup" className="px-6 py-3 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300">Get Started</Link>
       </header>
-      Ver
+      
       <section className="flex flex-col items-center py-20 px-8 bg-white">
         <h2 className="text-4xl font-semibold text-red-600 mb-6 underline">About Us</h2>
         <p className="text-lg max-w-3xl text-center text-gray-700">

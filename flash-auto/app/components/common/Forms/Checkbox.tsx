@@ -1,14 +1,14 @@
 import Link from 'next/link';
 
-const Checkbox = ({ id, name, checked, label, link , error}: {id: string, name: string, checked: boolean, label: string, link: string, error?: string}) => (
+const Checkbox = ({ id, checked, label, link , onChange}: {id: string,  checked: boolean, label: string, link: string, onChange:() => void}) => (
+    
     <div className="flex items-center">
       <input
         id={id}
-        name={name}
         type="checkbox"
         required
         checked={checked}
-        // onChange={onChange}
+        onChange={onChange}
         className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
       />
       <label htmlFor={id} className="ml-2 block text-sm text-gray-900">

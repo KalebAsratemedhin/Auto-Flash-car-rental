@@ -6,7 +6,7 @@ interface Reply {
   id: string;
   user: {
     name: string;
-    avatar: string;
+    photo: string;
   };
   content: string;
   likes: number;
@@ -18,7 +18,7 @@ interface Comment {
   id: string;
   user: {
     name: string;
-    avatar: string;
+    photo: string;
   };
   content: string;
   likes: number;
@@ -33,7 +33,7 @@ const mockComments: Comment[] = [
     id: '1',
     user: {
       name: 'John Doe',
-      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John'
+      photo: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John'
     },
     content: 'Great car! The performance is amazing and the autopilot feature works flawlessly.',
     likes: 12,
@@ -43,7 +43,7 @@ const mockComments: Comment[] = [
         id: '1-1',
         user: {
           name: 'Alice Cooper',
-          avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alice'
+          photo: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alice'
         },
         content: 'I agree! The autopilot is really impressive.',
         likes: 3,
@@ -55,7 +55,7 @@ const mockComments: Comment[] = [
     id: '2',
     user: {
       name: 'Jane Smith',
-      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jane'
+      photo: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jane'
     },
     content: 'I rented this car last week. The experience was fantastic! Very comfortable for long drives.',
     likes: 8,
@@ -66,7 +66,7 @@ const mockComments: Comment[] = [
     id: '3',
     user: {
       name: 'Mike Johnson',
-      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mike'
+      photo: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mike'
     },
     content: 'The owner was very responsive and helpful. The car was in perfect condition.',
     likes: 5,
@@ -120,7 +120,7 @@ const CommentSection = ({ carId }: CommentSectionProps) => {
                 id: `${commentId}-${comment.replies.length + 1}`,
                 user: {
                   name: 'Current User',
-                  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=CurrentUser'
+                  photo: 'https://api.dicebear.com/7.x/avataaars/svg?seed=CurrentUser'
                 },
                 content: replyContent,
                 likes: 0,
@@ -174,7 +174,7 @@ const CommentSection = ({ carId }: CommentSectionProps) => {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <img
-                  src={comment.user.avatar}
+                  src={comment.user.photo}
                   alt={comment.user.name}
                   className="w-10 h-10 rounded-full"
                 />
@@ -221,7 +221,7 @@ const CommentSection = ({ carId }: CommentSectionProps) => {
                     <div className="flex items-center space-x-3">
                       <FiCornerDownRight className="text-gray-400" />
                       <img
-                        src={reply.user.avatar}
+                        src={reply.user.photo}
                         alt={reply.user.name}
                         className="w-8 h-8 rounded-full"
                       />
