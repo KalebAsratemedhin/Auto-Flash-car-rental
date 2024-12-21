@@ -5,13 +5,43 @@ export type DashboardStat = {
     description: string;
 };
 
+export type UserAnalytics = {
+    monthlyRentals: number[];
+    carRentalsDistribution: {labels: [], frequency: []}
+}
+
+export type SignInFormData = {
+    email: string;
+    password: string;
+  
+}
+
+export type SignUpFormData = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    password: string;
+    confirmPassword: string;
+  }
+
 export type User = {
-    name: string;
+    firstName: string;
+    lastName: string;
     _id: string;
     email: string;
-    phone: string;
+    phoneNumber: string;
     role: string;
     status: string;
-    joinDate: string;
+    address?: string;
+    profilePic?: string;
+    isVerified?: boolean;
+
     
+}
+
+export type AuthResponse = {
+    id: string;
+    role: string;
+    accessToken: string;
 }

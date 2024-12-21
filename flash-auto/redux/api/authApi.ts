@@ -1,22 +1,25 @@
 import { apiSlice } from './apiSlice';
+import {ApiResponse} from '../../types/ApiResponse';
+import { User, AuthResponse, SignUpFormData, SignInFormData } from '../../types/user';
+
 
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation({
+    signin: builder.mutation<ApiResponse<AuthResponse>, SignInFormData>({
       query: (credentials) => ({
-        url: '/auth/login',
+        url: '/auth/signin',
         method: 'POST',
         body: credentials,
       }),
     }),
-    register: builder.mutation({
+    signup: builder.mutation<ApiResponse<AuthResponse>, SignUpFormData>({
       query: (userData) => ({
         url: '/auth/signup',
         method: 'POST',
         body: userData,
       }),
     }),
-    googleLogin: builder.mutation({
+    googleSignin: builder.mutation({
       query: (tokenId) => ({
         url: '/auth/google',
         method: 'POST',
@@ -50,7 +53,7 @@ export const authApi = apiSlice.injectEndpoints({
         body: passwords,
       }),
     }),
-    getCurrentUser: builder.query({
+    getCurrentUser: builder.query<ApiResponse<User>, void>({
       query: () => '/users/me',
       providesTags: ['User'],
     }),
@@ -59,9 +62,9 @@ export const authApi = apiSlice.injectEndpoints({
 
 
 export const {
-  useLoginMutation,
-  useRegisterMutation,
-  useGoogleLoginMutation,
+  useSigninMutation,
+  useSignupMutation,
+  useGoogleSigninMutation,
   useVerifyEmailMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,

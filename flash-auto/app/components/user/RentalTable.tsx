@@ -29,9 +29,9 @@ const RentalTable = ({rental}: {rental: Rental[]}) => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
                 {
-                    rental.map((rental) => {
+                    rental.map((rental, index) => {
                         return (
-                            <tr>
+                            <tr key={index}>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="flex items-center">
                                     <div className="h-10 w-10 flex-shrink-0">

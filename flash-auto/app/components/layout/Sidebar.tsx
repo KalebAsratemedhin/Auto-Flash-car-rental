@@ -16,7 +16,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="fixed left-0 top-0 h-full pl-4  pr-6">
+    <div className="w-[250px] px-8 py-4  bg-white">
       <Logo />
       
       <Link
@@ -49,7 +49,7 @@ const Sidebar = () => {
         })}
       </nav>
 
-      <div className="absolute bottom-2 left-4 right-2">
+      <div className="">
         <div className="bg-blue-50 rounded-lg p-4">
           <h3 className="text-sm font-semibold text-blue-900">Need Help?</h3>
           <p className="text-sm text-blue-700 mt-1">

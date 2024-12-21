@@ -1,41 +1,36 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Logo from '../layout/Header/Logo';
 import ErrorAlert from '../common/Forms/ErrorAlert';
 import Checkbox from '../common/Forms/Checkbox';
-import InputField from '../common/Forms/InputField';
 import Button from '../common/Forms/Button';
+import { useRouter } from 'next/navigation';
 
 import { FcGoogle } from 'react-icons/fc';
 import { HiOutlineMail, HiOutlineUser } from 'react-icons/hi';
 import { RiLockPasswordLine } from 'react-icons/ri';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
-
-import {useRegisterMutation} from '@/redux/api/authApi';
+import {useSignupMutation} from '@/redux/api/authApi';
 import TextField from '../utils/TextField';
+import { SignUpFormData } from '@/types/user';
+import { authSelector, setAuth } from "@/redux/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-interface SignUpFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-  password: string;
-  confirmPassword: string;
-}
 
 const SignUp: React.FC = () => {
   const { register, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm<SignUpFormData>();
   const [error, setError] = useState<string>('');
-  const [signup, {isLoading, isSuccess, isError, error: signupError, data}] = useRegisterMutation();
+  const [signup, {isLoading, isSuccess, isError, error: signupError, data}] = useSignupMutation();
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const authState = useSelector(authSelector)
+  const dispatch = useDispatch()
+  const navigate = useRouter()
 
-  const onSubmit: SubmitHandler<SignUpFormData> = async (data) => {
+  const onSubmit: SubmitHandler<SignUpFormData> = async (data ) => {
     try {
-      console.log('signup', data)
-      // register()
       await signup(data)
     } catch (err) {
       setError(error);
@@ -44,6 +39,15 @@ const SignUp: React.FC = () => {
 
   const handleGoogleSignUp = async () => {
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log('signup data', data)
+      dispatch(setAuth(data.data)); 
+      navigate.push(`/dashboard/${authState.id}`)
+
+    }
+  }, [isSuccess]);
 
   return (
     <div className="min-h-screen bg-white shadow-md rounded-lg flex flex-col justify-center py-12 sm:px-6 lg:px-8">

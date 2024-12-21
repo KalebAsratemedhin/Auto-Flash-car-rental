@@ -4,6 +4,10 @@ import RentalHistory from './RentalHistory';
 import StatsList from '../common/StatsList';
 import PopularBrands from './PopularBrands';
 import FeaturedCars from './FeaturedCars';
+import {useGetUserSummaryQuery, useGetUserAnalyticsQuery} from '@/redux/api/userApi';
+import CustomLoading from '../utils/CustomLoading';
+import CustomError from '../utils/CustomError';
+
 const cars = [
   {
     _id: '1',
@@ -25,7 +29,7 @@ const cars = [
   },
 
 ];
-const data = [3, 5, 2, 8, 4, 6];
+const rentalHistory = [3, 5, 2, 8, 4, 6];
   const pieChartData = {
     labels: ['BMW', 'Mercedes', 'Audi', 'Tesla', 'Toyota'],
     frequency: [30, 25, 20, 15, 10],
@@ -51,48 +55,32 @@ const rental = [
   }
 ]
 
-const userStats = [
-  {
-    title: "Total Rentals",
-    subtitle: "This Month",
-    value: "28",
-    description: "↑ 12% from last month",
-  },
-  {
-    title: "Total Spent",
-    subtitle: "This Month",
-    value: "$2,890",
-    description: "↓ 3% from last month",
-    
-  },
-  {
-    title: "Active Rentals",
-    subtitle: "Today",
-    value: "3",
-    description: "2 due this week",
-  },
-];
-const UserDashboard = () => {
-  
-  
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="">
-        <div className="p-8">
-          <StatsList stats={userStats}/>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <RentalHistory data={data} />  
-            <PopularBrands data={pieChartData}   />
+const UserDashboard = ({id}: {id: string}) => {
+  const {isLoading, isSuccess, isError, error, data} = useGetUserSummaryQuery(id)
+  const {error: analyticsError, data: analyticsData} = useGetUserAnalyticsQuery(id)
+
+  if (isLoading) return <CustomLoading />;
+  if (isError) return <CustomError error={error} />;
+
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="">
+          <div className="p-8">
+            <StatsList stats={data?.data!}/>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              <RentalHistory data={analyticsData?.data?.monthlyRentals} />  
+              <PopularBrands data={pieChartData}   />
+            </div>
+
+            <FeaturedCars cars={cars} />
+
+            <RentalTable rental={rental} />        
           </div>
-
-          <FeaturedCars cars={cars} />
-
-          <RentalTable rental={rental} />        
         </div>
       </div>
-    </div>
-  );
+    );
 };
 
 export default UserDashboard;

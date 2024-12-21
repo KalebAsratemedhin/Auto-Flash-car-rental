@@ -24,14 +24,7 @@ const superAdminStats = [
     value: "$89K",
     description: "↑ 22% vs last month",
     descriptionColor: "text-green-600",
-  },
-  {
-    title: "Suspended Users",
-    subtitle: "Total",
-    value: "23",
-    description: "1.8% of users",
-    descriptionColor: "text-red-600",
-  },
+  }
 ];
 
 const lineGraphData = {
@@ -54,6 +47,7 @@ const users = [
 ]
 
 const SuperAdminDashboard = () => {
+  
 
   return (
     <div className="min-h-screen bg-gray-50">

@@ -1,19 +1,31 @@
 'use client'
+import { clearAuth } from '@/redux/slices/authSlice';
 import { ApiError } from '@/types/ApiResponse';
 import { SerializedError } from '@reduxjs/toolkit';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux'
+import { CustomSerializedError } from '@/types/CustomSerializedError';
 
 const CustomError = ({ error, duration=1000000}: { error: FetchBaseQueryError | SerializedError, duration?: number}) => {
   const [visible, setVisible] = useState(true);
   const err = error as FetchBaseQueryError
   const apiError = err.data as ApiError
+  const dispatch = useDispatch()
 
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setVisible(false);
     }, duration);
+
+    // if(error){
+    //   console.log('err', error)
+    // }
+
+    // if((error as CustomSerializedError)?.data.message === 'Access denied. No token provided.'){
+    //   dispatch(clearAuth())
+    // }
 
     return () => clearTimeout(timer); 
   }, [duration]);

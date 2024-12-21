@@ -5,9 +5,9 @@ import { RootState } from '../store';
 const baseQuery = fetchBaseQuery({
   baseUrl: `http://localhost:5000`,
   prepareHeaders: (headers, { getState }) => {
-      const state = getState() as RootState;
-      const accessToken = state.auth?.token;
+      const accessToken = localStorage.getItem('accessToken') || (getState() as RootState).auth.accessToken
 
+      console.log('aacces', accessToken)
       if (accessToken) {
           headers.set('authorization', `Bearer ${accessToken}`);
       }

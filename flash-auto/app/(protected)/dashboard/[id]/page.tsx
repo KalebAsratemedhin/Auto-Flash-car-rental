@@ -1,29 +1,39 @@
 'use client'
 import CustomLoading from '@/app/components/utils/CustomLoading';
 import CustomError from '@/app/components/utils/CustomError';
-import { useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 import Custom404 from '@/app/components/utils/Custom404';
 import AdminDashboard from '@/app/components/admin/AdminDashboard';
 import UserDashboard from '@/app/components/user/UserDashboard';
 import SuperAdminDashboard from '@/app/components/superadmin/SuperAdminDashboard';
+import { useDispatch, useSelector } from 'react-redux';
+import { authSelector } from '@/redux/slices/authSlice';
+import { useRouter } from 'next/navigation';
 
 const Dashboard = () => {
-  const role = 'user';
-  // const { data: session, status } = useSession();
-
-  // if (status === 'unauthenticated') {
-  //   return <Custom404 />;
-  // }
-  // if (status === 'loading') {
-  //   return <CustomLoading />;
-  // }
-
-  // if (status === 'authenticated') {
+  const authState = useSelector(authSelector)
+  const dispatch = useDispatch()
+  const navigate = useRouter()
 
 
-  switch(role){
+
+  // useEffect(() => {
+  //   if(authState.accessToken){
+  //       console.log('just success', data)
+  //       dispatch(setAuth(data.data))
+
+  //   }
+  //   if(authState.id){
+  //       console.log(authState.id, 'email', authState.role)
+  //       navigate.push(`/dashboard/${authState.id}`)
+  //   }
+
+  // }, [isSuccess, authState])
+
+
+  switch(authState.role){
     case 'user':
-      return <UserDashboard  />
+      return <UserDashboard id={authState.id!}  />
     case 'admin':
       return <AdminDashboard  />
     case 'super-admin':
