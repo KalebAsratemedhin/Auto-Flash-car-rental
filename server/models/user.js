@@ -2,7 +2,11 @@ import mongoose from 'mongoose';
 
 const userSchema = mongoose.Schema(
     {
-        fullName: {
+        firstName: {
+            type: String,
+            required: true,
+        },
+        lastName: {
             type: String,
             required: true,
         },
@@ -28,6 +32,11 @@ const userSchema = mongoose.Schema(
         },
         phoneNumber: {
             type: String,
+        },
+        status: {
+            type: ['active', 'suspended'], 
+            default: 'active'
+
         },
         address: {
             type: String,

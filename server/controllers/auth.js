@@ -9,7 +9,7 @@ const secret = process.env.JWT_SECRET;
 
 export const signup = async (req, res) => {
     try {
-        const { fullName, password, email, phoneNumber } = req.body;
+        const { firstName, lastName, password, email, phoneNumber } = req.body;
 
         const duplicate = await User.findOne({ email });
         if (duplicate) {
@@ -18,11 +18,12 @@ export const signup = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await User.create({
-            fullName,
+            firstName,
+            lastName,
             phoneNumber,
             email,
             password: hashedPassword,
-        });
+        }); 
 
         const payload = { id: user._id, role: user.role };
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });

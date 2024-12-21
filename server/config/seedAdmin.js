@@ -3,25 +3,28 @@ import bcrypt from 'bcryptjs';
 
 import User from '../models/user.js'; 
 import connectDatabase from './db.js';
+import 'dotenv/config'; 
+
 
 const seedAdmin = async () => {
   try {
 
     connectDatabase()
     
-    const existingAdmin = await User.findOne({ role: 'admin' });
+    const existingAdmin = await User.findOne({ role: 'super-admin' });
     if (existingAdmin) {
       return;
     }
 
-    const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
+    const hashedPassword = await bcrypt.hash('12345super', 10);
 
     const adminUser = new User({
-      fullName: 'Kaleb A.',
+      firstName: 'Kaleb',
+      lastName: 'Asratemedhin',
       username: 'admin',
-      email: 'admin@example.com',
+      email: 'super@example.com',
       password: hashedPassword,
-      role: 'admin',
+      role: 'super-admin',
     });
 
     await adminUser.save();

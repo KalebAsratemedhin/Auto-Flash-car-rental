@@ -26,6 +26,7 @@ app.use(bodyParser.json());
 
 connectDatabase();
 
+app.use(responseMiddleware);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/auth', (await import('./routes/auth.js')).default);
 app.use('/users', (await import('./routes/user.js')).default);
@@ -34,7 +35,6 @@ app.use('/rents', (await import('./routes/rent.js')).default);
 app.use('/ratings', (await import('./routes/rating.js')).default);
 app.use('/comments', (await import('./routes/comment.js')).default);
 
-app.use(responseMiddleware);
 
 app.listen(5000, () => {
     console.log("Successfully running on port 5000");

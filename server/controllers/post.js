@@ -2,9 +2,10 @@ import Car from '../models/car.js';
 
 export const postCar = async (req, res) => {
   try {
-    const { make, model, description, age, price, count} = req.body;
+    const { make, model, description, year, price, transmission, fuelType, seats} = req.body;
     const photoPath = req.file.path
     const {id} = req.user
+
  
     if (!photoPath) {
       return res.error('Photo is required', 404);
@@ -14,11 +15,12 @@ export const postCar = async (req, res) => {
       owner: id,
       make,
       model,
-      age: parseInt(age),
-      count: parseInt(count),
-      available: parseInt(count),
+      seats: parseInt(seats),
+      year: parseInt(year),
       price: parseInt(price),
       description,
+      transmission,
+      fuelType,
       photo: photoPath
     });
 

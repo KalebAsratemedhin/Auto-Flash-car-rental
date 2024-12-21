@@ -1,24 +1,40 @@
 import Rent from '../models/rent.js'
 import User from '../models/user.js'
 import Car from '../models/car.js'
+import mongoose from 'mongoose'
+import { getUserSummary, getAdminSummary, getSuperAdminSummary } from '../utils/summary.js'
+import { getUserAnalytics, getAdminAnalytics, getSuperAdminAnalytics } from '../utils/analytics.js'
 
 
-export const getUserSummary = async(req, res) => {
+export const getSummary = async(req, res) => {
     try {
         
         const {id} = req.params
-        const result = await Rent.aggregate([
-            { $match: { rentee: mongoose.Types.ObjectId(id) } }, 
-            {
-              $group: {
-                _id: null,
-                totalCost: { $sum: "$cost" }, 
-                rentCount: { $sum: 1 }    
-              }
-            }
-          ]);
+        const user = await User.findById(id)
+ 
+        if (!user){
+          return res.error('User not found', 404)
+        }
+
+        let data;
+        
+        if(user.role === 'user'){
+          data = await getUserSummary(user._id)
+        }
       
-        const data = result.length > 0 ? result[0] : { totalCost: 0, rentCount: 0 };
+        if(user.role === 'admin'){
+          data = await getAdminSummary(user._id)
+        }
+
+        if(user.role === 'super-admin'){
+          data = await getSuperAdminSummary(user._id)
+        }
+
+        if(!data){
+          res.error('User summary could not be fetched successfully.', 404)
+        }
+
+        console.log('summary', data)
 
         res.success("User summary fetched successfully.", 200, data)
 
@@ -28,36 +44,47 @@ export const getUserSummary = async(req, res) => {
     }
 }
 
-export const getAdminSummary = async(req, res) => {
-    try {
-        
-        const {id} = req.params
-        const result = await Rent.aggregate([
-            { $match: { renter: mongoose.Types.ObjectId(id) } }, 
-            {
-              $group: {
-                _id: null,
-                totalCost: { $sum: "$cost" }, 
-                rentCount: { $sum: 1 }    
-              }
-            }
-          ]);
-
-        const posts = await Car.countDocuments({owner: id})
+export const getAnalytics = async(req, res) => {
+  try {
       
-        let data = result.length > 0 ? result[0] : { totalCost: 0, rentCount: 0 };
-        data.posts = posts
+    const {id} = req.params
+    const user = await User.findById(id)
 
-        res.success("User summary fetched successfully.", 200, data)
-
-        
-    } catch (error) {
-        res.error('Internal server error.', 500, [error.message]);        
+    if (!user){
+      return res.error('User not found', 404)
     }
+
+    let data;
+    
+    if(user.role === 'user'){
+      data = await getUserAnalytics(user._id)
+      console.log('user analytic', data)
+    }
+  
+    if(user.role === 'admin'){
+      data = await getAdminAnalytics(user._id)
+    }
+
+    if(user.role === 'super-admin'){
+      data = await getSuperAdminAnalytics(user._id)
+    }
+
+    if(!data){
+      return res.error('User summary could not be fetched successfully.', 404)
+    }
+
+    res.success("User summary fetched successfully.", 200, data)
+
+      
+  } catch (error) {
+      res.error('Internal server error.', 500, [error.message]);        
+  }
 }
+
 
 export const getCurrentUser =  async(req, res) => {
     try {
+        console.log('curr user', req.user)
         const {id} = req.user
         const user = await User.findById(id)
 
@@ -69,6 +96,23 @@ export const getCurrentUser =  async(req, res) => {
         
     }
 }
+
+export const getAllUsers =  async(req, res) => {
+  try {
+      const users = await User.find()
+      console.log('users', users)
+
+
+      res.success("List of all users", 200, users)
+
+      
+  } catch (error) {
+      res.error('Internal server error.', 500, [error.message]);
+      
+  }
+}
+
+
 
 export const getUserById =  async(req, res) => {
     try {
@@ -119,7 +163,7 @@ export const updateUserProfile = async (req, res) => {
 
 export const upgradeToAdmin = async (req, res) => {
     try {
-      const { id } = req.user; 
+      const { id } = req.params; 
       
   
       const user = await User.findByIdAndUpdate(
