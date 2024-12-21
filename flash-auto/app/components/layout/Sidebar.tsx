@@ -3,9 +3,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FiHome, FiCompass, FiHeart, FiCalendar, FiMessageCircle, FiSettings, FiPlusCircle } from 'react-icons/fi';
 import Logo from './Header/Logo';
+import { useDispatch } from  'react-redux';
+import { clearAuth } from '@/redux/slices/authSlice';
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const dispatch = useDispatch();
 
   const menuItems = [
     { icon: FiHome, label: 'Home', href: '/' },
@@ -47,6 +50,8 @@ const Sidebar = () => {
             </Link>
           );
         })}
+
+        <button className='flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-gray-600 hover:bg-gray-50' onClick={() => dispatch(clearAuth())}>Signout</button>
       </nav>
 
       <div className="">

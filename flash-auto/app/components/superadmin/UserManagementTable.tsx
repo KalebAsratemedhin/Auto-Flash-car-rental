@@ -1,8 +1,19 @@
 import {User} from '@/types/user';
+import { useGetAllUsersQuery } from '@/redux/api/userApi';
+import CustomLoading from '../utils/CustomLoading';
+import CustomError from '../utils/CustomError';
+import { useMakeAdminMutation } from '@/redux/api/userApi';
 
-const UserManagementTable = ({users}: {users: User[]}) => {
+const UserManagementTable = () => {
+    const {isLoading, isSuccess, isError, error, data} = useGetAllUsersQuery()
+    const [makeAdmin] = useMakeAdminMutation()
 
-    const handleMakeAdmin = (userId: string) => {
+  
+    if (isLoading) return <CustomLoading />;
+    if (isError) return <CustomError error={error} />;
+
+    const handleMakeAdmin = async (userId: string) => {
+        await makeAdmin(userId)
 
       };
     
@@ -28,9 +39,9 @@ const UserManagementTable = ({users}: {users: User[]}) => {
                 </tr>
                 </thead>
                 <tbody>
-                {users.map((user) => (
+                {data?.data?.map((user) => (
                     <tr key={user._id} className="border-b border-gray-100">
-                    <td className="py-4">{user.name}</td>
+                    <td className="py-4">{user.firstName}</td>
                     <td className="py-4">{user.email}</td>
                     <td className="py-4">
                         <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
@@ -50,7 +61,7 @@ const UserManagementTable = ({users}: {users: User[]}) => {
                         {user.status}
                         </span>
                     </td>
-                    <td className="py-4">{user.joinDate}</td>
+                    <td className="py-4">{new Date(user.createdAt!).toDateString()}</td>
                     <td className="py-4 space-x-2">
                         {user.role !== 'Admin' && (
                         <button

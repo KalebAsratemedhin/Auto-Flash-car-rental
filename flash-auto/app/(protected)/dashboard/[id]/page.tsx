@@ -12,32 +12,14 @@ import { useRouter } from 'next/navigation';
 
 const Dashboard = () => {
   const authState = useSelector(authSelector)
-  const dispatch = useDispatch()
-  const navigate = useRouter()
-
-
-
-  // useEffect(() => {
-  //   if(authState.accessToken){
-  //       console.log('just success', data)
-  //       dispatch(setAuth(data.data))
-
-  //   }
-  //   if(authState.id){
-  //       console.log(authState.id, 'email', authState.role)
-  //       navigate.push(`/dashboard/${authState.id}`)
-  //   }
-
-  // }, [isSuccess, authState])
-
 
   switch(authState.role){
     case 'user':
       return <UserDashboard id={authState.id!}  />
     case 'admin':
-      return <AdminDashboard  />
+      return <AdminDashboard id={authState.id!} />
     case 'super-admin':
-      return <SuperAdminDashboard  />
+      return <SuperAdminDashboard id={authState.id!}  />
     default:
       return <Custom404 />
     }

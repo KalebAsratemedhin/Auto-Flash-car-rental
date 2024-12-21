@@ -1,21 +1,23 @@
 import { apiSlice } from './apiSlice';
+import {ApiResponse} from '../../types/ApiResponse';
+import { Car, Post } from '@/types/car';
 
 export const carsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getCars: builder.query({
       query: (params) => ({
-        url: '/cars',
+        url: '/posts',
         params,
       }),
       providesTags: ['Car'],
     }),
     getCarById: builder.query({
-      query: (id) => `/cars/${id}`,
+      query: (id) => `/posts/${id}`,
       providesTags: ['Car'],
     }),
-    createCar: builder.mutation({
+    createCar: builder.mutation<ApiResponse<Car>, Post>({
       query: (carData) => ({
-        url: '/cars',
+        url: '/posts',
         method: 'POST',
         body: carData,
       }),
@@ -60,3 +62,16 @@ export const carsApi = apiSlice.injectEndpoints({
     }),
   }),
 });
+
+
+export const {
+  useGetCarsQuery,
+  useGetCarByIdQuery,
+  useCreateCarMutation,
+  useUpdateCarMutation,
+  useDeleteCarMutation,
+  useToggleFavoriteMutation,
+  useGetFavoritesQuery,
+  useSearchCarsQuery,
+  useGetCarsByOwnerQuery,
+} = carsApi;

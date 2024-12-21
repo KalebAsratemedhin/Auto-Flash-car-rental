@@ -2,6 +2,11 @@ import StatsList from '../common/StatsList';
 import RentalsTable from './RentalsTable';
 import MonthlyRevenue from './MonthlyRevenue';
 import CarUtilization from './CarUtilization';
+import { useGetUserSummaryQuery } from '@/redux/api/userApi';
+import { useGetUserAnalyticsQuery } from '@/redux/api/userApi';
+import CustomLoading from '../utils/CustomLoading';
+import CustomError from '../utils/CustomError';
+
 
 const activeRentals = [
   {
@@ -89,23 +94,24 @@ const adminStats = [
 const revenueData = [4000, 3000, 5000, 4500, 6000, 7000];
 const carUtilization = [70, 20, 10];
 
-const AdminDashboard = () => {
+const AdminDashboard = ({id}: {id: string}) => {
+  const {isLoading, isError, error,data: analyticsData} = useGetUserAnalyticsQuery(id)
+
+  if (isLoading) return <CustomLoading />;
+  if (isError) return <CustomError error={error} />;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-        
-      <div className="pl-64 pt-16">
-        <div className="p-8">
-          <StatsList stats={adminStats}/>
+    <div className="min-h-screen bg-gray-50">                                                                                                                             
+      <div className="p-8">
+        <StatsList id={id}/>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <MonthlyRevenue data={revenueData} />
-            <CarUtilization data={carUtilization}/>
-          </div>
-
-          <RentalsTable activeRentals={activeRentals} />
-          
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <MonthlyRevenue data={analyticsData?.data?.lineGraphData} />
+          <CarUtilization data={analyticsData?.data?.pieChartData}/>
         </div>
+
+        <RentalsTable activeRentals={activeRentals} />
+        
       </div>
     </div>
   );

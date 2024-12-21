@@ -6,8 +6,8 @@ export type DashboardStat = {
 };
 
 export type UserAnalytics = {
-    monthlyRentals: number[];
-    carRentalsDistribution: {labels: [], frequency: []}
+    lineGraphData: number[];
+    pieChartData: {labels: [], frequency: []}
 }
 
 export type SignInFormData = {
@@ -36,6 +36,7 @@ export type User = {
     address?: string;
     profilePic?: string;
     isVerified?: boolean;
+    createdAt?: string;
 
     
 }

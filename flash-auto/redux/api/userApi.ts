@@ -9,15 +9,29 @@ export const userApi = apiSlice.injectEndpoints({
       query: (id) => `/users/summary/${id}`,
       providesTags: ['User'],
     }),
+
     getUserAnalytics: builder.query<ApiResponse<UserAnalytics>,  string>({
         query: (id) => `/users/analytics/${id}`,
-        providesTags: ['User'],
+        // providesTags: ['User'],
       }),
+    getAllUsers: builder.query<ApiResponse<User[]>,  void>({
+      query: () => `/users`,
+      // providesTags: ['User'],
+    }),
+    makeAdmin: builder.mutation<ApiResponse<User>, string>({
+      query: (id) => ({
+        url: `/users/${id}/admin`,
+        method: 'PATCH',
+      }),
+
+    })
   }), 
 });
 
 export const {
   useGetUserSummaryQuery,
-  useGetUserAnalyticsQuery
+  useGetUserAnalyticsQuery,
+  useGetAllUsersQuery,
+  useMakeAdminMutation
 
 } = userApi;

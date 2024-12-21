@@ -1,12 +1,29 @@
 export type Car = {
     _id: string;
-    make: string;
-    model: string;
-    // year: number;
-    price: string;
     photo: string;
     status: string;
-    // description: string;
     rating: number;
-    // location: string;
+    make: string;
+    model: string;
+    year: number;
+    transmission: string;
+    fuelType: string;
+    seats: number;
+    price: number;
+    description: string;
 }
+
+
+
+
+export type Post = {
+    make: string;
+    model: string;
+    year: number;
+    transmission: string;
+    fuelType: string;
+    seats: number;
+    price: number;
+    description: string;
+    photo: File | null;
+  };

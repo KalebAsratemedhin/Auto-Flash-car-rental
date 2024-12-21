@@ -4,7 +4,7 @@ import RentalHistory from './RentalHistory';
 import StatsList from '../common/StatsList';
 import PopularBrands from './PopularBrands';
 import FeaturedCars from './FeaturedCars';
-import {useGetUserSummaryQuery, useGetUserAnalyticsQuery} from '@/redux/api/userApi';
+import { useGetUserAnalyticsQuery } from '@/redux/api/userApi';
 import CustomLoading from '../utils/CustomLoading';
 import CustomError from '../utils/CustomError';
 
@@ -57,8 +57,7 @@ const rental = [
 
 
 const UserDashboard = ({id}: {id: string}) => {
-  const {isLoading, isSuccess, isError, error, data} = useGetUserSummaryQuery(id)
-  const {error: analyticsError, data: analyticsData} = useGetUserAnalyticsQuery(id)
+  const {isLoading, isSuccess, isError, error, data: analyticsData} = useGetUserAnalyticsQuery(id)
 
   if (isLoading) return <CustomLoading />;
   if (isError) return <CustomError error={error} />;
@@ -67,10 +66,10 @@ const UserDashboard = ({id}: {id: string}) => {
       <div className="min-h-screen bg-gray-50">
         <div className="">
           <div className="p-8">
-            <StatsList stats={data?.data!}/>
+            <StatsList id={id}/>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-              <RentalHistory data={analyticsData?.data?.monthlyRentals} />  
+              <RentalHistory data={analyticsData?.data?.lineGraphData} />  
               <PopularBrands data={pieChartData}   />
             </div>
 

@@ -3,29 +3,6 @@ import UserManagementTable from './UserManagementTable';
 import RevenueAndBookingsTrend from './RevenueAndBookingsTrend';
 import UserDistribution from './UserDistribution';
 
-const superAdminStats = [
-  {
-    title: "Total Users",
-    subtitle: "This Month",
-    value: "1,245",
-    description: "↑ 85 new users",
-    descriptionColor: "text-green-600",
-  },
-  {
-    title: "Active Admins",
-    subtitle: "Now",
-    value: "12",
-    description: "2 pending approval",
-    descriptionColor: "text-yellow-600",
-  },
-  {
-    title: "Platform Revenue",
-    subtitle: "This Month",
-    value: "$89K",
-    description: "↑ 22% vs last month",
-    descriptionColor: "text-green-600",
-  }
-];
 
 const lineGraphData = {
   revenue: [8000, 12000, 15000, 14000, 18000, 22000],
@@ -46,15 +23,14 @@ const users = [
   }
 ]
 
-const SuperAdminDashboard = () => {
+const SuperAdminDashboard = ({id}: {id: string}) => {
   
 
   return (
     <div className="min-h-screen bg-gray-50">
 
-      <div className="pl-64 pt-16">
         <div className="p-8">
-        <StatsList stats={superAdminStats} />
+        <StatsList id={id} />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             <RevenueAndBookingsTrend data={lineGraphData} />  
@@ -64,7 +40,6 @@ const SuperAdminDashboard = () => {
 
           <UserManagementTable users={users} />
         </div>
-      </div>
     </div>
   );
 };
