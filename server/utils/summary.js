@@ -60,20 +60,9 @@ export const getUserSummary = async (userId) => {
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
   
-    const carsSummary = await Car.aggregate([
-      {
-        $match: {
-          owner: userId,
-        },
-      },
-      {
-        $group: {
-          _id: null,
-          totalCars: { $sum: 1 },
-          availableCars: { $sum: '$count' }, 
-        },
-      }
-    ]);
+    const carCounts = await Car.countDocuments({owner: userId});
+    const availableCarCounts = await Car.countDocuments({owner: userId, status: 'available'});
+
   
   
     const rentSummary = await Rent.aggregate([
@@ -103,13 +92,13 @@ export const getUserSummary = async (userId) => {
       renter: userId,
       status: 'active',
     });
-  
+
   
     return [
       {
         title: "Total Cars",
         subtitle: "This Month",
-        value: carsSummary.totalCars || 0,
+        value: carCounts ,
         description: "↑ 5 new listings",
       },
       {
@@ -127,7 +116,7 @@ export const getUserSummary = async (userId) => {
       {
         title: "Available Cars",
         subtitle: "Now",
-        value: carsSummary.availableCars || 0,
+        value: availableCarCounts,
         description: "38% of fleet",
       },
     ];

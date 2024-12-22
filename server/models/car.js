@@ -8,6 +8,11 @@ const carSchema = new mongoose.Schema(
       required: true,
     },
     make: { type: String, required: true },
+    status: { 
+      type: String,
+      enum: ['available', 'rented'], 
+      default: 'available', 
+    },
     model: { type: String, required: true },
     price: { type: Number, required: true },
     description: { type: String, required: true },

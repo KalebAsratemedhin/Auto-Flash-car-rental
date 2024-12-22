@@ -3,10 +3,10 @@ import Car from '../models/car.js';
 export const postCar = async (req, res) => {
   try {
     const { make, model, description, year, price, transmission, fuelType, seats} = req.body;
+
     const photoPath = req.file.path
     const {id} = req.user
 
- 
     if (!photoPath) {
       return res.error('Photo is required', 404);
     }
