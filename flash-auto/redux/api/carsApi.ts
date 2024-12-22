@@ -15,12 +15,30 @@ export const carsApi = apiSlice.injectEndpoints({
       query: (id) => `/posts/${id}`,
       providesTags: ['Car'],
     }),
-    createCar: builder.mutation<ApiResponse<Car>, Post>({
-      query: (carData) => ({
-        url: '/posts',
-        method: 'POST',
-        body: carData,
-      }),
+    createCar: builder.mutation<ApiResponse<Car>, FormData>({
+      query: (carData) => {
+        // const formData = new FormData();
+
+        // // Append all text data
+        // Object.keys(carData).forEach((key) => {
+        //   if (key === 'photo' && carData[key]) {
+        //     // Append the file (assuming it's an array of files)
+        //     formData.append(key, carData[key][0]);
+        //   } else {
+        //     formData.append(key, carData[key]);
+        //   }
+        // });
+        // console.log('in api', formData)
+
+        // Return the request with the FormData as the body
+        return {
+          url: '/posts',
+          method: 'POST',
+          body: carData,
+
+        };
+        
+      },
       invalidatesTags: ['Car'],
     }),
     updateCar: builder.mutation({

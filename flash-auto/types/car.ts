@@ -25,5 +25,5 @@ export type Post = {
     seats: number;
     price: number;
     description: string;
-    photo: File | null;
+    photo: any;
   };

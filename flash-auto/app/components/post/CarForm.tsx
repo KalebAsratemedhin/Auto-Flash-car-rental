@@ -4,6 +4,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Post } from '@/types/car'
 import { useCreateCarMutation } from '@/redux/api/carsApi';
+import CustomError from '../utils/CustomError';
 
 const PostCarForm: React.FC = () => {
   const {
@@ -26,9 +27,29 @@ const PostCarForm: React.FC = () => {
   });
   const [postCar, {isLoading, isSuccess, isError, error}] = useCreateCarMutation()
 
-  const onSubmit = async(data: Post) => {
-    console.log('post', data);
-    await postCar(data)
+  const onSubmit = async (data: Post) => {
+    const formData = new FormData();
+
+    // Append form fields to FormData
+    formData.append('make', data.make);
+    formData.append('model', data.model);
+    formData.append('year', String(data.year));
+    formData.append('transmission', data.transmission);
+    formData.append('fuelType', data.fuelType);
+    formData.append('seats', String(data.seats));
+    formData.append('price', String(data.price));
+    formData.append('description', data.description);
+
+    // Append photo file if available
+    if (data.photo && data.photo[0]) {
+      formData.append('photo', data.photo[0]);
+      data.photo = {data: formData}
+    }
+
+    for (var key of formData.entries()) {
+			console.log(key[0] + ', ' + key[1])
+		}
+    await postCar(formData);  // Assuming the mutation accepts FormData
   };
 
   const previewImage = watch('photo');
@@ -36,7 +57,7 @@ const PostCarForm: React.FC = () => {
   return (
     <div className="max-w-4xl">
       <h2 className="text-3xl font-bold text-gray-900 mb-8">Post a New Car</h2>
-
+      {isError && <CustomError error={error} />}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
           <h3 className="text-xl font-semibold text-gray-900 mb-4">Basic Information</h3>
@@ -129,7 +150,6 @@ const PostCarForm: React.FC = () => {
           </div>
         </div>
 
-      
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
           <h3 className="text-xl font-semibold text-gray-900 mb-4">Images</h3>
           <div className="space-y-4">
@@ -140,27 +160,24 @@ const PostCarForm: React.FC = () => {
               <span className="mt-2 text-sm text-gray-500">Click to upload images</span>
               <input
                 type="file"
-                // accept="image/*"
+                accept="image/*"
                 {...register('photo')}
                 className="hidden"
               />
             </label>
             {previewImage && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                
-                  <div className="relative aspect-w-3 aspect-h-2">
-                    {/* <img
-                      src={URL.createObjectURL(previewImage)}
-                      alt={`Preview`}
-                      className="object-cover rounded-lg"
-                    /> */}
-                  </div>
-                
+                <div className="relative aspect-w-3 aspect-h-2">
+                  <img
+                    src={URL.createObjectURL(previewImage[0])}
+                    alt="Preview"
+                    className="object-cover rounded-lg"
+                  />
+                </div>
               </div>
             )}
           </div>
         </div>
-
 
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
           <h3 className="text-xl font-semibold text-gray-900 mb-4">Description</h3>
@@ -177,7 +194,6 @@ const PostCarForm: React.FC = () => {
             type="submit"
             className="px-6 py-3 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-
             Post Car
           </button>
         </div>
