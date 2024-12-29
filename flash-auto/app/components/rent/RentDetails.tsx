@@ -10,8 +10,8 @@ const RentDetails = ({rent}: {rent: Rent}) => {
    
     const [updateRent, {isLoading, isError, isSuccess, error, data}] = useUpdateRentalMutation()
     const defaults = {
-      startDate: rent.startDate,
-      endDate: rent.endDate,
+      startDate: rent.startDate.split("T")[0] || "",
+      endDate: rent.endDate.split("T")[0] || "",
       insuranceOption: rent.insuranceOption,
       additionalDrivers: rent.additionalDrivers,
     }
@@ -25,12 +25,9 @@ const RentDetails = ({rent}: {rent: Rent}) => {
   
     if(isError)
       return <CustomError error={error} />
-  
-    if(isSuccess ){
-      
-  
+   
     return <RentCarForm car={rent.car} defaults={defaults} onSubmit={onSubmit} mode="update" />
-}}
+}
 
 export default RentDetails
 

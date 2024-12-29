@@ -14,7 +14,7 @@ const Sidebar = () => {
     { icon: FiHome, label: 'Home', href: '/' },
     { icon: FiCompass, label: 'Discover', href: '/discover' },
     { icon: FiHeart, label: 'Favorites', href: '/favorites' },
-    { icon: FiCalendar, label: 'My Rentals', href: '/rentals' },
+    { icon: FiCalendar, label: 'My Rentals', href: '/rent' },
     { icon: FiSettings, label: 'Settings', href: '/settings' },
   ];
 

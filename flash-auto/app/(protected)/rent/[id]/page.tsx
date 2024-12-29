@@ -16,10 +16,11 @@ const Page = ({params}: {params: {id: string}}) => {
     
     if(isSuccess){
         const rent = data.data
+        console.log('rent', rent)
         return (
             <div className="flex flex-col gap-4 px-12 my-4 mx-auto max-w-6xl">
               <div className="flex-grow"> 
-              <RentDetails rent={rent!}  />
+                <RentDetails rent={rent!}  />
               </div>
             </div>)
         }

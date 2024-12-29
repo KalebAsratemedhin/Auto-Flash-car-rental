@@ -7,7 +7,7 @@ export type DashboardStat = {
 
 export type UserAnalytics = {
     lineGraphData: number[];
-    pieChartData: {labels: [], frequency: []}
+    pieChartData: {brands: [], frequencies: []}
 }
 
 export type SignInFormData = {

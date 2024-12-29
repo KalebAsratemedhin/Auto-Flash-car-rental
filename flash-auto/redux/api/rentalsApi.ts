@@ -5,9 +5,9 @@ import { ApiResponse } from '@/types/ApiResponse';
 
 export const rentalsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getRentals: builder.query<ApiResponse<Rent[]>, string>({                  
-      query: (id) => `/rents/users/${id}`,
-      providesTags: ['Rent'],
+    getRentals: builder.query<ApiResponse<Rent[]>, void>({                  
+      query: () => `/rents/current-user`,
+      providesTags: ['CurrentUserRent'],
     }),
     getRentalById: builder.query<ApiResponse<Rent>, string>({
       query: (id) => `/rents/${id}`,
@@ -24,7 +24,7 @@ export const rentalsApi = apiSlice.injectEndpoints({
     updateRental: builder.mutation<ApiResponse<Rent>, {id: string, rentalData: RentForm}>({
       query: ({ id, rentalData }) => ({
         url: `/rents/${id}`,
-        method: 'PUT',
+        method: 'PATCH',
         body: rentalData,
       }),
       invalidatesTags: ['Rent'],
@@ -67,7 +67,7 @@ export const rentalsApi = apiSlice.injectEndpoints({
 export const {
   useGetRentalsQuery,
   useGetRentalByIdQuery,
-  useCreateRentalMutation,
+  useCreateRentalMutation, 
   useUpdateRentalMutation,
   useCancelRentalMutation,
   useGetUserRentalsQuery,

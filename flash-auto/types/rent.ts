@@ -18,6 +18,7 @@ export type Rent = {
     rentee: string;
     status: string;
     car: Car;
+    totalCost: number;
     
 }
 

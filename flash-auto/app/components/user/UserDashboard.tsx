@@ -36,24 +36,6 @@ const rentalHistory = [3, 5, 2, 8, 4, 6];
 
   };
 
-const rental = [
-  {
-    car: {
-      _id: '1',
-      make: 'BMW',
-      model: 'B6',
-      photo: 'https://images.unsplash.com/photo-1617469767053-8f0899a7ef7f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      price: '$120/day',
-      rating: 4.8,
-      status: 'Available',
-    },
-    startDate: '2023-08-01',
-    endDate: '2023-08-05',
-    status: 'Active',
-    totalCost: 480,
-    _id: '1'
-  }
-]
 
 
 const UserDashboard = ({id}: {id: string}) => {
@@ -69,13 +51,13 @@ const UserDashboard = ({id}: {id: string}) => {
             <StatsList id={id}/>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-              <RentalHistory data={analyticsData?.data?.lineGraphData} />  
-              <PopularBrands data={pieChartData}   />
+              <RentalHistory data={analyticsData?.data?.lineGraphData!} />  
+              <PopularBrands data={analyticsData?.data?.pieChartData!}   />
             </div>
 
             <FeaturedCars cars={cars} />
 
-            <RentalTable rental={rental} />        
+            <RentalTable />        
           </div>
         </div>
       </div>
