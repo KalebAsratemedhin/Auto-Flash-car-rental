@@ -1,4 +1,5 @@
 import Car from '../models/car.js';
+import Rating from '../models/rating.js';
 
 export const postCar = async (req, res) => {
   try {
@@ -88,3 +89,15 @@ export const getAdminCars = async (req, res) => {
 };
 
 
+export const getFavoriteCars = async (req, res) => {
+  try {
+    console.log('favs', req.user)
+    const {id} = req.user;
+    const favorites = await Rating.find({userId: id}).populate('carId')
+    console.log('favs', favorites)
+    res.success('Favorites fetched successfully', 200, favorites );
+
+  } catch (error) {
+    res.error('Internal server error.', 500, [error.message]);
+  }
+};

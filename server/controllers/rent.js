@@ -1,11 +1,16 @@
 import Car from '../models/car.js';
 import Rent from '../models/rent.js';
-
 export const createRent = async (req, res) => {
   try {
-    const { startDate, endDate } = req.body;
+    console.log('rent', req.params)
+    const { startDate, endDate, insuranceOption = 'basic', additionalDrivers = 0 } = req.body;
     const userId = req.user.id;
     const { carId } = req.params;
+
+    // Validate additional drivers count
+    if (additionalDrivers < 0) {
+      return res.error('Additional drivers count cannot be negative.', 400);
+    }
 
     const car = await Car.findById(carId).populate('owner');
     if (!car) return res.error('Car not found', 404);
@@ -14,18 +19,24 @@ export const createRent = async (req, res) => {
       return res.error('You cannot rent your own car.', 403);
     }
 
-    if (car.available === 0) return res.error('Car not available.', 400);
+    if (car.status === 'rented') return res.error('Car not available.', 400);
+
+    if (new Date(endDate) <= new Date(startDate)) {
+      return res.error('End date must be after start date.', 400);
+    }
 
     const rent = await Rent.create({
       startDate,
       endDate,
       pricePerDay: car.price,
+      insuranceOption,
+      additionalDrivers,
       car: carId,
       renter: car.owner._id,
       rentee: userId,
     });
 
-    car.available -= 1;
+    car.status = 'rented';
     await car.save();
 
     res.success('Rental request created successfully', 201, rent);
@@ -58,6 +69,7 @@ export const evaluateRent = async (req, res) => {
 
 export const getCurrentUserRents = async (req, res) => {
   try {
+
     const { id } = req.user;
 
     const rents = await Rent.find({
@@ -70,6 +82,19 @@ export const getCurrentUserRents = async (req, res) => {
   }
 };
 
+export const getRentById = async (req, res) => {
+  try {
+
+    const { rentId } = req.params;
+
+    const rent = await Rent.findById(rentId).populate('car');
+
+    console.log('rent', rent)
+    res.success('Rent retrieved successfully', 200, rent);
+  } catch (error) {
+    res.error('Failed to retrieve user rents', 500, [error.message]);
+  }
+};
 export const cancelRent = async (req, res) => {
   try {
     const { rentId } = req.params;
@@ -88,3 +113,22 @@ export const cancelRent = async (req, res) => {
     res.error('Failed to cancel rent', 500, [error.message]);
   }
 };
+
+export const updateRent = async (req, res) => {
+  try {
+    const { rentId } = req.params;
+    const { id } = req.user;
+
+    const rent = await Rent.findById(rentId);
+
+    if(rent.rentee.toString() === id){
+      await Rent.findByIdAndUpdate(rentId, req.body);
+      return res.success('Rent updated successfully', 200);
+    }
+
+    res.error('Unauthorized', 403);
+  } catch (error) {
+    res.error('Failed to cancel rent', 500, [error.message]);
+  }
+};
+

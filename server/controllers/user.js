@@ -33,9 +33,7 @@ export const getSummary = async(req, res) => {
         if(!data){
           res.error('User summary could not be fetched successfully.', 404)
         }
-
-        console.log('summary', data)
-
+      
         res.success("User summary fetched successfully.", 200, data)
 
         

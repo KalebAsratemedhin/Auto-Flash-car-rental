@@ -20,7 +20,7 @@ const carSchema = new mongoose.Schema(
     transmission: { type: String, required: true },
     fuelType: { type: String, required: true },
     seats: { type: Number, required: true }, 
-    images: { type: [String], default: [] }, 
+    photo: { type: String, requiredd: true }, 
   },
   { timestamps: true }
 );

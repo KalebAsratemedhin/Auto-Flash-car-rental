@@ -5,6 +5,7 @@ export const addRating = async (req, res) => {
     const {carId} = req.params
     const { score } = req.body;
     const userId = req.user.id; 
+    console.log('rate', carId, score)
 
     const existing = await Rating.findOne({carId, userId})
 
@@ -16,6 +17,7 @@ export const addRating = async (req, res) => {
 
     const rating = await Rating.create({ userId, carId, score });
 
+    console.log('rating', rating)
     res.success('Rating created successfully', 201, rating.toObject());
   } catch (error) {
     res.error('Internal server error.', 500, [error.message]);
@@ -69,14 +71,3 @@ export const deleteRating = async (req, res) => {
 };
 
 
-export const getFavoriteCars = async (req, res) => {
-  try {
-    const {id} = req.user;
-    const favs = await Rating.find({userId: id})
-    
-    res.success('Favorites fetched successfully', 200, {favs} );
-
-  } catch (error) {
-    res.error('Internal server error.', 500, [error.message]);
-  }
-};
