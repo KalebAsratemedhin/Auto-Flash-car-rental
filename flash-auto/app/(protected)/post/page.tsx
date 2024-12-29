@@ -1,6 +1,6 @@
-import CarForm from '@/app/components/post/CarForm'
+import CarForm from '@/app/components/car/CarForm'
 import React from 'react'
-import PostCarForm from '../../components/post/CarForm'
+import PostCarForm from '../../components/car/CarForm'
 
 const page = () => {
   return (

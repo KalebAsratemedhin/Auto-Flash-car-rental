@@ -14,6 +14,11 @@ export type Car = {
 }
 
 
+export type FavoriteCar = {
+    userId: string;
+    carId: Car;
+    score: number;
+}
 
 
 export type Post = {

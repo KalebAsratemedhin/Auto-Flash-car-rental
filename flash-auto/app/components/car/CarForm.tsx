@@ -30,7 +30,6 @@ const PostCarForm: React.FC = () => {
   const onSubmit = async (data: Post) => {
     const formData = new FormData();
 
-    // Append form fields to FormData
     formData.append('make', data.make);
     formData.append('model', data.model);
     formData.append('year', String(data.year));
@@ -40,7 +39,6 @@ const PostCarForm: React.FC = () => {
     formData.append('price', String(data.price));
     formData.append('description', data.description);
 
-    // Append photo file if available
     if (data.photo && data.photo[0]) {
       formData.append('photo', data.photo[0]);
       data.photo = {data: formData}
@@ -49,7 +47,7 @@ const PostCarForm: React.FC = () => {
     for (var key of formData.entries()) {
 			console.log(key[0] + ', ' + key[1])
 		}
-    await postCar(formData);  // Assuming the mutation accepts FormData
+    await postCar(formData);  
   };
 
   const previewImage = watch('photo');

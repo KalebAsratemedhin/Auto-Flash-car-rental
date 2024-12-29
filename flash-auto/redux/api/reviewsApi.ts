@@ -1,9 +1,9 @@
 import { apiSlice } from './apiSlice';
+import { ApiResponse } from '@/types/ApiResponse';
 
 export const reviewsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    // Comments endpoints
-    getCarComments: builder.query({
+    getComments: builder.query({
       query: ({ carId, page = 1, limit = 10 }) => ({
         url: `/comments/car/${carId}`,
         params: { page, limit },
@@ -34,19 +34,17 @@ export const reviewsApi = apiSlice.injectEndpoints({
       invalidatesTags: ['Comment'],
     }),
 
-    // Ratings endpoints
-    getCarRatings: builder.query({
-      query: ({ carId, page = 1, limit = 10, sort = '-createdAt' }) => ({
-        url: `/ratings/car/${carId}`,
-        params: { page, limit, sort },
+    getOneRating: builder.query<ApiResponse<{score: number}>, string>({
+      query: (carId) => ({
+        url: `/ratings/cars/${carId}/current-user`,
       }),
       providesTags: ['Rating'],
     }),
-    createRating: builder.mutation({
-      query: ({ carId, rating, review }) => ({
-        url: `/ratings/car/${carId}`,
+    createRating: builder.mutation<ApiResponse<{score: number}>, {carId: string, score: number}>({
+      query: ({ carId, score}) => ({
+        url: `/ratings/cars/${carId}`,
         method: 'POST',
-        body: { rating, review },
+        body: {score},
       }),
       invalidatesTags: ['Rating', 'Car'],
     }),
@@ -74,3 +72,10 @@ export const reviewsApi = apiSlice.injectEndpoints({
     }),
   }),
 });
+
+export const {
+  useGetCommentsQuery,
+  useCreateCommentMutation,
+  useCreateRatingMutation,
+  useGetOneRatingQuery,
+} = reviewsApi;

@@ -1,6 +1,6 @@
 import { apiSlice } from './apiSlice';
-import {ApiResponse} from '../../types/ApiResponse';
-import { Car, Post } from '@/types/car';
+import { ApiResponse } from '../../types/ApiResponse';
+import { Car, Post, FavoriteCar } from '@/types/car';
 
 export const carsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -50,8 +50,8 @@ export const carsApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Car', 'User'],
     }),
-    getFavorites: builder.query({
-      query: () => '/cars/favorites',
+    getFavorites: builder.query<ApiResponse<FavoriteCar[]>, void>({
+      query: () => '/posts/favorites',
       providesTags: ['Car'],
     }),
     searchCars: builder.query({
