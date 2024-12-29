@@ -1,35 +1,35 @@
 import { apiSlice } from './apiSlice';
+import { RentForm, Rent } from '@/types/rent';
+import { ApiResponse } from '@/types/ApiResponse';
+
 
 export const rentalsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getRentals: builder.query({
-      query: (params) => ({
-        url: '/rents',
-        params,
-      }),
+    getRentals: builder.query<ApiResponse<Rent[]>, string>({                  
+      query: (id) => `/rents/users/${id}`,
       providesTags: ['Rent'],
     }),
-    getRentalById: builder.query({
+    getRentalById: builder.query<ApiResponse<Rent>, string>({
       query: (id) => `/rents/${id}`,
       providesTags: ['Rent'],
     }),
-    createRental: builder.mutation({
-      query: (rentalData) => ({
-        url: '/rents',
+    createRental: builder.mutation<ApiResponse<Rent>, {rentalData: RentForm, carId: string}> ({
+      query: ({rentalData, carId}) => ({
+        url: `/rents/cars/${carId}`,
         method: 'POST',
         body: rentalData,
       }),
       invalidatesTags: ['Rent', 'Car'],
     }),
-    updateRental: builder.mutation({
-      query: ({ id, ...rentalData }) => ({
+    updateRental: builder.mutation<ApiResponse<Rent>, {id: string, rentalData: RentForm}>({
+      query: ({ id, rentalData }) => ({
         url: `/rents/${id}`,
         method: 'PUT',
         body: rentalData,
       }),
       invalidatesTags: ['Rent'],
     }),
-    cancelRental: builder.mutation({
+    cancelRental: builder.mutation<ApiResponse<String>, string>({
       query: (id) => ({
         url: `/rents/${id}/cancel`,
         method: 'PUT',
@@ -63,3 +63,15 @@ export const rentalsApi = apiSlice.injectEndpoints({
     }),
   }),
 });
+
+export const {
+  useGetRentalsQuery,
+  useGetRentalByIdQuery,
+  useCreateRentalMutation,
+  useUpdateRentalMutation,
+  useCancelRentalMutation,
+  useGetUserRentalsQuery,
+  useGetOwnerRentalsQuery,
+  useCompleteRentalMutation,
+  useGetRentalHistoryQuery,
+} = rentalsApi;
